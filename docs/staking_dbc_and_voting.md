@@ -15,7 +15,7 @@
 
      ```bash
      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-     cargo install --force subkey --git https://github.com/paritytech/substrate --version 2.0.0 --locked
+     cargo install --force subkey --git https://github.com/paritytech/substrate --version 2.0.1 --locked
      ```
 
 2. 获取一些的DBC。打开[https://test.dbcwallet.io/#/accounts](https://test.dbcwallet.io/#/accounts ), 您将能看到您的账户与余额
