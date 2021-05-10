@@ -2554,7 +2554,9 @@ impl<T: Config> Module<T> {
             let first_release_date = Self::first_committee_team_release_era();
             if active_era.index == first_release_date {
                 Self::reward_to_committee_team();
-            } else if (active_era.index - first_release_date) % 365 == 0 {
+            } else if active_era.index > first_release_date
+                && (active_era.index - first_release_date) % 365 == 0
+            {
                 Self::reward_to_committee_team();
             }
 
