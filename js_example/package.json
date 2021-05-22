@@ -1,0 +1,10 @@
+{
+  "name": "js_example",
+  "version": "1.0.0",
+  "description": "js example for developer",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@polkadot/api": "^4.10.1"
+  }
+}
