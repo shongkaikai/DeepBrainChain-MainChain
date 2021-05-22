@@ -6,14 +6,19 @@
 
 + 转账并监测是否成功：
 
-```bash
-yarn install
-node transfer_example.js
-```
+  ```bash
+  yarn install
+  node transfer_example.js
+  ```
 
++ 查询链上存储
 
+  ```bash
+  node query_storage.js 
+  ```
 
-
-
-
++ 发送链上交易
+  ```
+  node sign_txs.js
+  ```
 
