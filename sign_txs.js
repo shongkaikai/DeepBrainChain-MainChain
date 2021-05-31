@@ -38,8 +38,6 @@ async function dbcTest_sayHello(callFunc, accountFromKeyring, nonce) {
   );
 }
 
-async function onlineProfile_bondMachine(api, accountFromKeyring, nonce) {}
-
 async function main() {
   // 读取参数
   const args = minimist(process.argv.slice(2));
@@ -59,8 +57,6 @@ async function main() {
   const accountFromKeyring = keyring.createFromUri(args["key"]);
   // 获取账户nonce
   const { nonce } = await api.query.system.account(accountFromKeyring.address);
-
-  const onlineProfile_bondMachine = api.tx.dbcTesting.sayHello().signAndSend;
 
   // 根据模块与方法进行调用
   switch (args["module"]) {
