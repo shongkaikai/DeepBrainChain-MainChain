@@ -11,33 +11,6 @@ import { Keyring } from "@polkadot/keyring";
 import fs from "fs";
 import minimist from "minimist";
 
-async function dbcTest_sayHello(callFunc, accountFromKeyring, nonce) {
-  const a = await callFunc().signAndSend(
-    accountFromKeyring,
-    { nonce },
-    ({ events = [], status }) => {
-      console.log("Tx_status:", status.type);
-
-      if (status.isInBlock) {
-        console.log("Tx_inBlock:", status.asInBlock.toHex());
-
-        events.forEach(({ event: { data, method, section }, phase }) => {
-          console.log(
-            "Event:",
-            phase.toString(),
-            `${section}.${method}`,
-            data.toString()
-          );
-        });
-      } else if (status.isFinalized) {
-        console.log("Finalized_block_hash:", status.asFinalized.toHex());
-
-        process.exit(0);
-      }
-    }
-  );
-}
-
 async function main() {
   // 读取参数
   const args = minimist(process.argv.slice(2));
@@ -63,13 +36,19 @@ async function main() {
     case "onlineProfile":
       switch (args["func"]) {
         case "bondMachine":
-          const callFunc = api.tx.dbcTesting.sayHello;
-          await dbcTest_sayHello(callFunc, accountFromKeyring, nonce).catch(error => console.log(error.message));
+          const callFunc = api.tx.onlineProfile.bondMachine;
+          await do_sign_tx(callFunc, accountFromKeyring, nonce, ...args._).catch((error) => console.log(error.message));
           break;
       }
 
       break;
     case "dbcTesting":
+      switch (args["func"]) {
+        case "sayHello":
+          const callFunc = api.tx.dbcTesting.sayHello;
+          await do_sign_tx(callFunc, accountFromKeyring, nonce, ...args._).catch((error) => console.log(error.message));
+          break;
+      }
       break;
     case "Papayas":
       break;
@@ -78,5 +57,32 @@ async function main() {
   }
 }
 
+async function do_sign_tx(callFunc, accountFromKeyring, nonce, ...args) {
+  const a = await callFunc(...args).signAndSend(
+    accountFromKeyring,
+    { nonce },
+    ({ events = [], status }) => {
+      console.log("Tx_status:", status.type);
+
+      if (status.isInBlock) {
+        console.log("Tx_inBlock:", status.asInBlock.toHex());
+
+        events.forEach(({ event: { data, method, section }, phase }) => {
+          console.log(
+            "Event:",
+            phase.toString(),
+            `${section}.${method}`,
+            data.toString()
+          );
+        });
+      } else if (status.isFinalized) {
+        console.log("Finalized_block_hash:", status.asFinalized.toHex());
+
+        process.exit(0);
+      }
+    }
+  );
+}
+
 // main().catch(console.error);
-main().catch(error => console.log(error.message));
+main().catch((error) => console.log(error.message));
