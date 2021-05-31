@@ -62,8 +62,7 @@ async function main() {
 
   const onlineProfile_bondMachine = api.tx.dbcTesting.sayHello().signAndSend;
 
-  // TODO: 根据模块与方法进行调用
-  // const expr = "Papayas";
+  // 根据模块与方法进行调用
   switch (args["module"]) {
     case "onlineProfile":
       switch (args["func"]) {
