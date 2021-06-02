@@ -25,7 +25,7 @@ async function main() {
     types: type_json,
   });
 
-  // 读取助记词 type: sr25519, ssFormat: 42 (defaults)
+  // 读取密钥 type: sr25519, ssFormat: 42 (defaults)
   const keyring = new Keyring({ type: "sr25519" });
   // const accountFromKeyring = keyring.createFromUri(args["key"]); // 从助记词生成账户
   const accountFromKeyring = keyring.addFromUri(args["key"]); // 从私钥生成账户对
