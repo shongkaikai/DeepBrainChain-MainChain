@@ -1,6 +1,7 @@
 // Import the API & Provider and some utility functions
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { Keyring } from "@polkadot/keyring";
+import fs from "fs";
 
 // Some constants we are using in this sample
 const AMOUNT = 100;
