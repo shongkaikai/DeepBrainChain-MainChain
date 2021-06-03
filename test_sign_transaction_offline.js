@@ -1,9 +1,9 @@
-import { Keyring } from "@polkadot/api";
-import { ApiPromise, WsProvider } from "@polkadot/api";
+import { Keyring, ApiPromise, WsProvider } from "@polkadot/api";
 import fs from "fs";
 import fetch from "node-fetch";
 import { TypeRegistry } from "@polkadot/types";
 import { EXTRINSIC_VERSION } from "@polkadot/types/extrinsic/v4/Extrinsic";
+import { cryptoWaitReady } from '@polkadot/util-crypto';
 
 import {
   createSignedTx,
@@ -16,15 +16,9 @@ import {
 } from "@substrate/txwrapper";
 
 async function main() {
-  // 构建连接
-  const wsProvider = new WsProvider("wss://innertest.dbcwallet.io");
-  const data = fs.readFileSync("types.json");
-  const type_json = JSON.parse(data);
-  // Create the API and wait until ready
-  const api = await ApiPromise.create({
-    provider: wsProvider,
-    types: type_json,
-  });
+
+  // Wait for the promise to resolve async WASM
+  await cryptoWaitReady();
 
   // Create Substrate's type registry. If you're using a custom chain, you can
   // also put your own types here.
@@ -90,7 +84,7 @@ async function main() {
   // operation should be handled externally. Here, we just send a JSONRPC
   // request directly to the node.
   const actualTxHash = await rpcToNode("author_submitExtrinsic", [tx]);
-  console.log(`Actual Tx Hash: ${actualTxHash}`);
+  console.log(`ExpectedTxHash: ${expectedTxHash}, Actual Tx Hash: ${actualTxHash}`);
 
   process.exit(0);
 }
