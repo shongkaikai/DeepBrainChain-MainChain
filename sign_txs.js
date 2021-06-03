@@ -13,7 +13,7 @@ import minimist from "minimist";
 
 async function main() {
   // 读取参数
-  const args = minimist(process.argv.slice(2));
+  const args = minimist(process.argv.slice(2), {string: ["key"]});
  
   // 构建连接
   const wsProvider = new WsProvider(args["port"]);
@@ -28,7 +28,7 @@ async function main() {
   // 读取密钥 type: sr25519, ssFormat: 42 (defaults)
   const keyring = new Keyring({ type: "sr25519" });
   // const accountFromKeyring = keyring.createFromUri(args["key"]); // 从助记词生成账户
-  const accountFromKeyring = keyring.addFromUri('0x' + args["key"]); // 从私钥生成账户对
+  const accountFromKeyring = keyring.addFromUri(args["key"]); // 从私钥生成账户对
   
   // 获取账户nonce
   const { nonce } = await api.query.system.account(accountFromKeyring.address);
