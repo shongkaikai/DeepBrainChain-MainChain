@@ -77,18 +77,19 @@ async function do_sign_tx(callFunc, accountFromKeyring, nonce, ...args) {
       console.log("Tx_status:", status.type);
 
       if (status.isInBlock) {
-        console.log("Tx_inBlock:", status.asInBlock.toHex());
+        console.log("{Tx_inBlock:", status.asInBlock.toHex(), "}");
 
         events.forEach(({ event: { data, method, section }, phase }) => {
           console.log(
-            "Event:",
+            "{Event:",
             phase.toString(),
             `${section}.${method}`,
-            data.toString()
+            data.toString(),
+            "}"
           );
         });
       } else if (status.isFinalized) {
-        console.log("Finalized_block_hash:", status.asFinalized.toHex());
+        console.log("{Finalized_block_hash:", status.asFinalized.toHex(), "}");
 
         process.exit(0);
       }
