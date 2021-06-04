@@ -7,6 +7,7 @@
 
 // Import the API
 import { ApiPromise, WsProvider } from "@polkadot/api";
+import fs from "fs";
 
 // Our address for Alice on the dev chain
 const ALICE = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
@@ -39,6 +40,8 @@ async function main() {
     const validatorBalances = await Promise.all(
       validators.map((authorityId) => api.query.system.account(authorityId))
     );
+
+    console.log(`validatorBalances: ${validatorBalances}`);
 
     // Print out the authorityIds and balances of all validators
     console.log(

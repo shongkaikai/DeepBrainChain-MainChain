@@ -85,12 +85,10 @@ async function do_sign_tx(callFunc, accountFromKeyring, nonce, ...args) {
         });
       } else if (status.isFinalized) {
         console.log(`{"Finalized_block_hash:":"${status.asFinalized.toHex()}"}`);
-
-        process.exit(0);
       }
     }
   );
 }
 
-// main().catch(console.error);
-main().catch((error) => console.log(error.message));
+main().catch(console.error).finally(() => process.exit());
+// main().catch((error) => console.log(error.message));
