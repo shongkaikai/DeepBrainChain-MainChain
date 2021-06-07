@@ -13,8 +13,8 @@ import minimist from "minimist";
 
 async function main() {
   // 读取参数
-  const args = minimist(process.argv.slice(2), {string: ["key"]});
- 
+  const args = minimist(process.argv.slice(2), { string: ["key"] });
+
   // 构建连接
   const wsProvider = new WsProvider(args["port"]);
   const data = fs.readFileSync("types.json");
@@ -24,40 +24,28 @@ async function main() {
     provider: wsProvider,
     types: type_json,
   });
- 
+
   // 读取密钥 type: sr25519, ssFormat: 42 (defaults)
   const keyring = new Keyring({ type: "sr25519" });
   // const accountFromKeyring = keyring.createFromUri(args["key"]); // 从助记词生成账户
   const accountFromKeyring = keyring.addFromUri(args["key"]); // 从私钥生成账户对
-  
+
   // 获取账户nonce
   const { nonce } = await api.query.system.account(accountFromKeyring.address);
- 
+
   // 根据模块与方法进行调用
   switch (args["module"]) {
     case "onlineProfile":
       switch (args["func"]) {
         case "bondMachine":
-          const callFunc = api.tx.onlineProfile.bondMachine;
-          await do_sign_tx(
-            callFunc,
-            accountFromKeyring,
-            nonce,
-            ...args._
-          ).catch((error) => console.log(error.message));
+          var callFunc = api.tx.onlineProfile.bondMachine;
           break;
       }
       break;
     case "dbcTesting":
       switch (args["func"]) {
         case "sayHello":
-          const callFunc = api.tx.dbcTesting.sayHello;
-          await do_sign_tx(
-            callFunc,
-            accountFromKeyring,
-            nonce,
-            ...args._
-          ).catch((error) => console.log(error.message));
+          var callFunc = api.tx.dbcTesting.sayHello;
           break;
       }
       break;
@@ -66,6 +54,10 @@ async function main() {
     default:
       console.log(`Sorry, we are out of ${expr}.`);
   }
+
+  await do_sign_tx(callFunc, accountFromKeyring, nonce, ...args._).catch(
+    (error) => console.log(error.message)
+  );
 }
 
 async function do_sign_tx(callFunc, accountFromKeyring, nonce, ...args) {
@@ -84,11 +76,12 @@ async function do_sign_tx(callFunc, accountFromKeyring, nonce, ...args) {
           );
         });
       } else if (status.isFinalized) {
-        console.log(`{"Finalized_block_hash:":"${status.asFinalized.toHex()}"}`);
+        console.log(
+          `{"Finalized_block_hash:":"${status.asFinalized.toHex()}"}`
+        );
       }
     }
   );
 }
 
-main().catch(console.error).finally(() => process.exit());
-// main().catch((error) => console.log(error.message));
+main().catch((error) => console.log(error.message));
