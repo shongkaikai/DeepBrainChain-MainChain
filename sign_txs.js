@@ -33,28 +33,14 @@ async function main() {
   // 获取账户nonce
   const { nonce } = await api.query.system.account(accountFromKeyring.address);
 
-  // 根据模块与方法进行调用
-  switch (args["module"]) {
-    case "onlineProfile":
-      switch (args["func"]) {
-        case "bondMachine":
-          var callFunc = api.tx.onlineProfile.bondMachine;
-          break;
-      }
-      break;
-    case "dbcTesting":
-      switch (args["func"]) {
-        case "sayHello":
-          var callFunc = api.tx.dbcTesting.sayHello;
-          break;
-      }
-      break;
-    case "Papayas":
-      break;
-    default:
-      console.log(`Sorry, we are out of ${expr}.`);
-  }
+  // 创建方法map
+  var funcMap = {};
+  funcMap["onlineProfile"] = {};
+  funcMap["dbcTesting"] = {};
+  funcMap["onlineProfile"]["bondMachine"] = api.tx.onlineProfile.bondMachine;
+  funcMap["dbcTesting"]["sayHello"] = api.tx.dbcTesting.sayHello;
 
+  var callFunc = funcMap[args["module"]][args["func"]];
   await do_sign_tx(callFunc, accountFromKeyring, nonce, ...args._).catch(
     (error) => console.log(error.message)
   );
