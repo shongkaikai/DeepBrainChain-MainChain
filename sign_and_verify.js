@@ -27,6 +27,8 @@ const { isValid } = signatureVerify(message, signature, alice.address);
 // output the result
 console.log(`${u8aToHex(signature)} is ${isValid ? "valid" : "invalid"}`);
 
+console.log(`###Signature: ${u8aToHex(signature)}\n###Message: ${u8aToHex(message)},\n###Sender: ${alice.address}`);
+
 // naclSign
 const sender = naclKeypairFromString("sender");
 const senderIdBoxKey = naclBoxKeypairFromSecret(sender.secretKey);
@@ -41,7 +43,6 @@ console.log("sender seed", u8aToHex(sender.secretKey)); // same seed
 // n为私钥。对应C++版本：https://nacl.cr.yp.to/scalarmult.html
 console.log("senderBoxPubKey", u8aToHex(senderIdBoxKey.publicKey));
 console.log("senderBoxPriv", u8aToHex(senderIdBoxKey.secretKey)); // same seed
-
 
 const keyring2 = new Keyring({ type: "sr25519" });
 console.log("### Encode pubkey",keyring2.encodeAddress(senderIdBoxKey.publicKey));
