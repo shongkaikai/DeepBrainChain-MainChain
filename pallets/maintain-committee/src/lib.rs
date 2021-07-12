@@ -68,10 +68,6 @@ pub struct MTReportInfoDetail<AccountId, BlockNumber, Balance> {
     pub reporter: AccountId,
     /// 报告提交时间
     pub report_time: BlockNumber,
-    /// 包含错误原因的hash
-    pub raw_hash: [u8; 16],
-    /// 用户私钥生成的box_public_key，用于委员会解密
-    pub box_public_key: BoxPubkey,
     /// 报告人质押数量
     pub reporter_stake: Balance,
     /// 第一个委员会抢单时间
@@ -223,11 +219,6 @@ pub mod pallet {
         }
     }
 
-    // 报告人最小质押，默认100RMB等值DBC
-    #[pallet::storage]
-    #[pallet::getter(fn reporter_report_stake)]
-    pub(super) type ReporterReportStake<T: Config> = StorageValue<_, u64, ValueQuery>;
-
     // 默认抢单委员会的个数
     #[pallet::type_value]
     pub fn CommitteeLimitDefault<T: Config>() -> u32 {
@@ -292,17 +283,6 @@ pub mod pallet {
 
     #[pallet::call]
     impl<T: Config> Pallet<T> {
-        /// 设置报告人报告质押，单位：USD*10^6, 如设置：15384615 为100RMB (汇率6.5)
-        #[pallet::weight(0)]
-        pub fn set_reporter_report_stake(
-            origin: OriginFor<T>,
-            value: u64,
-        ) -> DispatchResultWithPostInfo {
-            ensure_root(origin)?;
-            ReporterReportStake::<T>::put(value);
-            Ok(().into())
-        }
-
         /// 用户报告机器有故障：无法租用或者硬件故障或者离线
         /// 报告无法租用提交Hash:机器ID+随机数+报告内容
         /// 报告硬件故障提交Hash:机器ID+随机数+报告内容+租用机器的Session信息
@@ -396,6 +376,8 @@ pub mod pallet {
             if !T::ManageCommittee::is_valid_committee(&committee) {
                 return Err(Error::<T>::NotCommittee.into());
             }
+
+            ensure!(<ReportInfo<T>>::contains_key(report_id), Error::<T>::OrderNotAllowBook);
 
             // 检查订单是否可预订状态
             let mut report_info = Self::report_info(report_id);
@@ -624,8 +606,9 @@ pub mod pallet {
         }
 
         // 订单状态必须是等待SubmittingRaw
+        // 只有报告了机器错误Hash的错误类型才允许提交Ras
         #[pallet::weight(10000)]
-        fn submit_confirm_raw(
+        pub fn submit_confirm_raw(
             origin: OriginFor<T>,
             report_id: ReportId,
             machine_id: MachineId,
@@ -642,6 +625,18 @@ pub mod pallet {
                 report_info.report_status == ReportStatus::SubmittingRaw,
                 Error::<T>::OrderStatusNotFeat
             );
+
+            if let MachineFaultType::MachineOffline(_) = report_info.machine_fault_type {
+                return Err(Error::<T>::OrderStatusNotFeat.into());
+            }
+
+            let fault_info_hash = match report_info.machine_fault_type {
+                MachineFaultType::HardwareFault(hash, _) => hash,
+                MachineFaultType::MachineUnrentable(hash, _) => hash,
+                MachineFaultType::MachineOffline(_) => {
+                    return Err(Error::<T>::OrderStatusNotFeat.into())
+                }
+            };
 
             // 检查是否提交了该订单的hash
             report_info
@@ -662,7 +657,8 @@ pub mod pallet {
             reporter_info_raw.extend(reporter_rand_str.clone());
             reporter_info_raw.extend(err_reason.clone());
             let reporter_report_hash = Self::get_hash(&reporter_info_raw);
-            if reporter_report_hash != report_info.raw_hash {
+
+            if reporter_report_hash != fault_info_hash {
                 return Err(Error::<T>::NotEqualReporterSubmit.into());
             }
 
@@ -743,11 +739,10 @@ impl<T: Config> Pallet<T> {
         let report_time = <frame_system::Module<T>>::block_number();
         let report_id = Self::get_new_report_id();
 
-        // 质押100RMB等值DBC
-        let reporter_report_stake = Self::reporter_report_stake();
-        let reporter_stake_need = T::DbcPrice::get_dbc_amount_by_value(reporter_report_stake)
+        let stake_need = <T as pallet::Config>::ManageCommittee::stake_per_order()
             .ok_or(Error::<T>::GetStakeAmountFailed)?;
-        <T as pallet::Config>::ManageCommittee::change_stake(&reporter, reporter_stake_need, true)
+
+        <T as pallet::Config>::ManageCommittee::change_stake(&reporter, stake_need, true)
             .map_err(|_| Error::<T>::StakeFailed)?;
 
         // 被报告的机器存储起来，委员会进行抢单
@@ -759,16 +754,13 @@ impl<T: Config> Pallet<T> {
 
         match machine_fault_type.clone() {
             // 当是前面两种情况时，记录下Hash和box_pubkey
-            MachineFaultType::HardwareFault(hash, box_pubkey)
-            | MachineFaultType::MachineUnrentable(hash, box_pubkey) => {
+            MachineFaultType::HardwareFault(_, _) | MachineFaultType::MachineUnrentable(_, _) => {
                 ReportInfo::<T>::insert(
                     &report_id,
                     MTReportInfoDetail {
                         reporter: reporter.clone(),
                         report_time,
-                        raw_hash: hash,
-                        box_public_key: box_pubkey,
-                        reporter_stake: reporter_stake_need,
+                        reporter_stake: stake_need,
                         machine_fault_type: machine_fault_type.clone(),
                         report_status: ReportStatus::Reported,
                         ..Default::default()
@@ -785,7 +777,7 @@ impl<T: Config> Pallet<T> {
                     MTReportInfoDetail {
                         reporter: reporter.clone(),
                         report_time,
-                        reporter_stake: reporter_stake_need,
+                        reporter_stake: stake_need,
                         machine_fault_type: machine_fault_type.clone(),
                         machine_id,
                         report_status: ReportStatus::Reported,

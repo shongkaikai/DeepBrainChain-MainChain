@@ -296,9 +296,10 @@ pub fn new_test_with_init_params_ext() -> sp_io::TestExternalities {
         // 设置单卡质押上限： 7700_000_000
         let _ = OnlineProfile::set_stake_usd_limit(RawOrigin::Root.into(), 7700_000_000);
         // 设置标准GPU租金价格: (3080得分1000；租金每月1000RMB) {1000; 150_000_000};
+        // NOTE: 租金，按Era提交
         let _ = OnlineProfile::set_standard_gpu_point_price(
             RawOrigin::Root.into(),
-            StandardGpuPointPrice { gpu_point: 1000, gpu_price: 150_000_000 },
+            StandardGpuPointPrice { gpu_point: 1000, gpu_price: 5_000_000 },
         );
 
         // 初始化price_ocw (0.012$)
