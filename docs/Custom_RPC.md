@@ -81,29 +81,21 @@
   {
       "jsonrpc": "2.0",
       "result": {
-          "calcPoints": 3310,
-          "gpuNum": 4,
-          "totalReward": "0"
-      },
-      "id": 1{
-      "jsonrpc": "2.0",
-      "result": {
-          "bondedMachines": [
-              {
-                  "calcPoint": 0,
-                  "gpuNum": 0,
-                  "machineId": [
-                      56, 101, 97, 102, 48, 52, 49, 53, 49, 54, 56, 55, 55, ...
-                  ],
-                  "machineStatus": "addingCustomizeInfo"
-              }
-          ],
-          "calcPoints": 0,
-          "gpuNum": 0,
-          "totalReward": "0"
+          "bondedMachines": [],
+          "stashStatistic": {
+              "canClaimReward": "0",
+              "linearReleaseReward": [],
+              "onlineMachine": [],
+              "totalBurnFee": "0",
+              "totalCalcPoints": 0,
+              "totalClaimedReward": "0",
+              "totalGpuNum": 0,
+              "totalMachine": [],
+              "totalRentFee": "0",
+              "totalRentedGpu": 0
+          }
       },
       "id": 1
-  }
   }
   ```
   
