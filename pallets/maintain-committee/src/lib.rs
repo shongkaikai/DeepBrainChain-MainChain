@@ -397,6 +397,8 @@ pub mod pallet {
                 return Err(Error::<T>::NotCommittee.into());
             }
 
+            ensure!(<ReportInfo<T>>::contains_key(report_id), Error::<T>::OrderNotAllowBook);
+
             // 检查订单是否可预订状态
             let mut report_info = Self::report_info(report_id);
             let mut ops_detail = Self::committee_ops(&committee, &report_id);
@@ -625,7 +627,7 @@ pub mod pallet {
 
         // 订单状态必须是等待SubmittingRaw
         #[pallet::weight(10000)]
-        fn submit_confirm_raw(
+        pub fn submit_confirm_raw(
             origin: OriginFor<T>,
             report_id: ReportId,
             machine_id: MachineId,
