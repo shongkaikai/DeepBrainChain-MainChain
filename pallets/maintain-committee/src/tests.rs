@@ -10,11 +10,20 @@ fn report_machine_fault_works() {
 
         let report_hash: [u8; 16] =
             hex::decode("986fffc16e63d3f7c43fe1a272ba3ba1").unwrap().try_into().unwrap();
+
+        // let a: [u8; 24] = hex::decode("78dd824a692abcea95648bb26086c58adb3f46d019e6738e")
+        //     .unwrap()
+        //     .try_into()
+        //     .unwrap();
+        // println!("{:?}", a);
+        // let hash = MaintainCommittee::get_hash(a.into());
+        // println!("{:?}", hash);
+
         let machine_id =
             "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
         let reporter_rand_str = "abcdef".as_bytes().to_vec();
         let committee_rand_str = "fedcba".as_bytes().to_vec();
-        let err_reason = "它坏了".as_bytes().to_vec();
+        let err_reason = "它坏了1".as_bytes().to_vec();
         let committee_hash =
             hex::decode("0029f96394d458279bcd0c232365932a").unwrap().try_into().unwrap();
 

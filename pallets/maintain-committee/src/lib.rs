@@ -1,4 +1,22 @@
 // 机器维护说明：
+// 1. 报告人提出报告，系统生成报告ID
+// 2. 报告人等待委员会抢单，在有委员会抢单之前，可以撤销报告
+// 3. 委员会抢单
+// 4. 报告人在委员会抢单半个小时内，提交加密信息给委员会，否则报告失败，将报告人的钱罚没，
+// 奖励给提交了Hash的或者当前还没等到加密信息的委员会，
+// 5. 委员会在抢单一个小时内，提交确认的Hash
+// 6. 委员会没有在1个小时内提交Hash，则该委员会从已预订的列表中移除，添加到惩罚列表。
+// 7. 委员会提交了Hash后，如果不满3个委员会，则继续抢单，重复上述流程。
+// 8. 当三个委员会提交了Hash，或者时间达到第一个委员会抢单3小时，状态变为提交原始值阶段
+// 9. 如果最后一个委员会不足1个小时，且没有提交Hash，将其移除，不奖励不惩罚
+// 9. 等待到第四小时，或者直到所有提交了Hash的委员会都提交原始值，开始总结
+// 10. 根据总结结果，
+// 10.1. 对机器进行下线，对委员会进行奖励，对报告人进行奖励
+// 10.2. 对报告人进行惩罚，对委员会进行奖励
+// 奖励内容：
+// 惩罚内容:
+// 如果机器不存在，则...不会有这种情况的吧...
+//
 // 1. 机器空闲时，报告人无法报告。机器拥有者可以主动下线
 // 2. 机器正在使用中，或者无法租用时，由报告人去报告。走本模块的报告--委员会审查流程。
 //
@@ -96,6 +114,10 @@ pub struct MTReportInfoDetail<AccountId, BlockNumber, Balance> {
     pub report_status: ReportStatus,
     /// 机器的故障类型
     pub machine_fault_type: MachineFaultType,
+    /// 报告人pubkey
+    pub reporter_boxpubkey: BoxPubkey,
+    /// 报告人报告的Hash
+    pub reporter_hash: [u8; 16],
 }
 
 #[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug)]
@@ -121,17 +143,17 @@ impl Default for ReportStatus {
 #[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug)]
 pub enum MachineFaultType {
     /// 硬件故障
-    HardwareFault([u8; 16], BoxPubkey),
+    HardwareFault,
     /// 无法租用故障
-    MachineUnrentable([u8; 16], BoxPubkey),
+    MachineUnrentable,
     /// 机器离线
-    MachineOffline(MachineId),
+    MachineOffline,
 }
 
 // 默认硬件故障
 impl Default for MachineFaultType {
     fn default() -> Self {
-        MachineFaultType::HardwareFault([0; 16], [0; 32])
+        MachineFaultType::HardwareFault
     }
 }
 
@@ -295,7 +317,13 @@ pub mod pallet {
         ) -> DispatchResultWithPostInfo {
             let reporter = ensure_signed(origin)?;
 
-            Self::report_handler(reporter, MachineFaultType::HardwareFault(hash, box_pubkey))
+            Self::report_handler(
+                reporter,
+                MachineFaultType::HardwareFault,
+                Some(hash),
+                Some(box_pubkey),
+                None,
+            )
         }
 
         /// 用户报告机器无法租用
@@ -307,7 +335,13 @@ pub mod pallet {
         ) -> DispatchResultWithPostInfo {
             let reporter = ensure_signed(origin)?;
 
-            Self::report_handler(reporter, MachineFaultType::MachineUnrentable(hash, box_pubkey))
+            Self::report_handler(
+                reporter,
+                MachineFaultType::MachineUnrentable,
+                Some(hash),
+                Some(box_pubkey),
+                None,
+            )
         }
 
         /// 用户报告机器掉线
@@ -318,7 +352,13 @@ pub mod pallet {
         ) -> DispatchResultWithPostInfo {
             let reporter = ensure_signed(origin)?;
 
-            Self::report_handler(reporter, MachineFaultType::MachineOffline(machine_id))
+            Self::report_handler(
+                reporter,
+                MachineFaultType::MachineOffline,
+                None,
+                None,
+                Some(machine_id),
+            )
         }
 
         // 报告人可以在抢单之前取消该报告
@@ -405,8 +445,7 @@ pub mod pallet {
 
             // 支付手续费或押金
             match report_info.machine_fault_type {
-                MachineFaultType::HardwareFault(_, _)
-                | MachineFaultType::MachineUnrentable(_, _) => {
+                MachineFaultType::HardwareFault | MachineFaultType::MachineUnrentable => {
                     // 此两种情况，需要质押100RMB等值DBC
                     let committee_order_stake = T::ManageCommittee::stake_per_order()
                         .ok_or(Error::<T>::GetStakeAmountFailed)?;
@@ -437,7 +476,7 @@ pub mod pallet {
                     }
                     LiveReport::<T>::put(live_report);
                 }
-                MachineFaultType::MachineOffline(_) => {
+                MachineFaultType::MachineOffline => {
                     // 付10个DBC的手续费
                     <generic_func::Module<T>>::pay_fixed_tx_fee(committee.clone())
                         .map_err(|_| Error::<T>::PayTxFeeFailed)?;
@@ -493,7 +532,7 @@ pub mod pallet {
 
             // 该orde处于验证中, 且还没有提交过加密信息
             let mut report_info = Self::report_info(&report_id);
-            if let MachineFaultType::MachineOffline(_) = report_info.machine_fault_type {
+            if let MachineFaultType::MachineOffline = report_info.machine_fault_type {
                 return Err(Error::<T>::NotNeedEncryptedInfo.into());
             }
 
@@ -627,17 +666,19 @@ pub mod pallet {
                 Error::<T>::OrderStatusNotFeat
             );
 
-            if let MachineFaultType::MachineOffline(_) = report_info.machine_fault_type {
+            if let MachineFaultType::MachineOffline = report_info.machine_fault_type {
                 return Err(Error::<T>::OrderStatusNotFeat.into());
             }
 
-            let fault_info_hash = match report_info.machine_fault_type {
-                MachineFaultType::HardwareFault(hash, _) => hash,
-                MachineFaultType::MachineUnrentable(hash, _) => hash,
-                MachineFaultType::MachineOffline(_) => {
-                    return Err(Error::<T>::OrderStatusNotFeat.into())
-                }
-            };
+            if let MachineFaultType::MachineOffline = report_info.machine_fault_type {
+                return Err(Error::<T>::OrderStatusNotFeat.into());
+            }
+
+            // let fault_info_hash = match report_info.machine_fault_type {
+            //     MachineFaultType::HardwareFault(hash, _) => hash,
+            //     MachineFaultType::MachineUnrentable(hash, _) => hash,
+            //     MachineFaultType::MachineOffline(_) => {}
+            // };
 
             // 检查是否提交了该订单的hash
             report_info
@@ -659,7 +700,7 @@ pub mod pallet {
             reporter_info_raw.extend(err_reason.clone());
             let reporter_report_hash = Self::get_hash(&reporter_info_raw);
 
-            if reporter_report_hash != fault_info_hash {
+            if reporter_report_hash != report_info.reporter_hash {
                 return Err(Error::<T>::NotEqualReporterSubmit.into());
             }
 
@@ -736,6 +777,9 @@ impl<T: Config> Pallet<T> {
     pub fn report_handler(
         reporter: T::AccountId,
         machine_fault_type: MachineFaultType,
+        hash: Option<[u8; 16]>,
+        box_pubkey: Option<BoxPubkey>,
+        machine_id: Option<MachineId>,
     ) -> DispatchResultWithPostInfo {
         let report_time = <frame_system::Module<T>>::block_number();
         let report_id = Self::get_new_report_id();
@@ -755,7 +799,7 @@ impl<T: Config> Pallet<T> {
 
         match machine_fault_type.clone() {
             // 当是前面两种情况时，记录下Hash和box_pubkey
-            MachineFaultType::HardwareFault(_, _) | MachineFaultType::MachineUnrentable(_, _) => {
+            MachineFaultType::HardwareFault | MachineFaultType::MachineUnrentable => {
                 ReportInfo::<T>::insert(
                     &report_id,
                     MTReportInfoDetail {
@@ -764,12 +808,14 @@ impl<T: Config> Pallet<T> {
                         reporter_stake: stake_need,
                         machine_fault_type: machine_fault_type.clone(),
                         report_status: ReportStatus::Reported,
+                        reporter_boxpubkey: box_pubkey.unwrap(),
+                        reporter_hash: hash.unwrap(),
                         ..Default::default()
                     },
                 );
             }
             // 当是offline时，记录下MachineId，还需要10个DBC作为手续费
-            MachineFaultType::MachineOffline(machine_id) => {
+            MachineFaultType::MachineOffline => {
                 <generic_func::Module<T>>::pay_fixed_tx_fee(reporter.clone())
                     .map_err(|_| Error::<T>::PayTxFeeFailed)?;
 
@@ -780,7 +826,7 @@ impl<T: Config> Pallet<T> {
                         report_time,
                         reporter_stake: stake_need,
                         machine_fault_type: machine_fault_type.clone(),
-                        machine_id,
+                        machine_id: machine_id.unwrap(),
                         report_status: ReportStatus::Reported,
                         ..Default::default()
                     },
@@ -903,6 +949,15 @@ impl<T: Config> Pallet<T> {
         return ReportConfirmStatus::Refuse(report_info.against_committee);
     }
 
+    // TODO: 如果报告人不提交加密信息，则被惩罚
+    // 如果委员会不在规定时间内提交Hash信息，则被惩罚
+    fn slash_misbehavior(
+        who: T::AccountId,
+        slash_amount: BalanceOf<T>,
+        reward_to: Vec<T::AccountId>,
+    ) {
+    }
+
     // 处理因时间而需要变化的状态
     // 第一个委员会预订超过3个小时，进入SubmittingRaw状态
     // 如果处于Verifying状态 1.
@@ -915,6 +970,7 @@ impl<T: Config> Pallet<T> {
             let mut report_info = Self::report_info(&a_report_id);
 
             // 距离预订时间超过了3个小时，则变成submitingHash状态
+            // 如果此时，还有处于验证状态的委员会，则将其移除，不奖励，不惩罚
             if now - report_info.report_time >= 360u64.saturated_into::<T::BlockNumber>() {
                 report_info.report_status = ReportStatus::SubmittingRaw;
                 report_info.verifying_committee = None;
