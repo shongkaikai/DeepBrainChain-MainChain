@@ -264,8 +264,6 @@
   "MTReportInfoDetail": {
     "reporter": "AccountId",
     "report_time": "BlockNumber",
-    "raw_hash": "[u8; 16]",
-    "box_public_key": "BoxPubkey",
     "reporter_stake": "Balance",
     "first_book_time": "BlockNumber",
     "machine_id": "MachineId",
