@@ -23,11 +23,11 @@ fn report_machine_fault_works() {
             "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
         let reporter_rand_str = "abcdef".as_bytes().to_vec();
         let committee_rand_str = "fedcba".as_bytes().to_vec();
-        let err_reason = "它坏了1".as_bytes().to_vec();
+        let err_reason = "它坏了".as_bytes().to_vec();
         let committee_hash =
             hex::decode("0029f96394d458279bcd0c232365932a").unwrap().try_into().unwrap();
 
-        let reporter_box_pubkey =
+        let reporter_boxpubkey =
             hex::decode("1e71b5a83ccdeff1592062a1d4da4a272691f08e2024a1ca75a81d534a76210a")
                 .unwrap()
                 .try_into()
@@ -35,17 +35,16 @@ fn report_machine_fault_works() {
         assert_ok!(MaintainCommittee::report_machine_fault(
             Origin::signed(reporter),
             report_hash,
-            reporter_box_pubkey
+            reporter_boxpubkey
         ));
 
         let mut report_status = crate::MTReportInfoDetail {
             reporter,
             report_time: 11,
             reporter_stake: 1250 * ONE_DBC, // 15,000,000 / 12,000
-            machine_fault_type: crate::MachineFaultType::HardwareFault(
-                report_hash,
-                reporter_box_pubkey,
-            ),
+            machine_fault_type: crate::MachineFaultType::HardwareFault,
+            reporter_boxpubkey,
+            reporter_hash: report_hash,
             ..Default::default()
         };
 

@@ -98,18 +98,6 @@
   },
   "ImageName": "Text",
   "TelecomName": "Text",
-  "CPU": {
-    "num": "Vec<u8>",
-    "type": "Vec<u8>"
-  },
-  "Disk": {},
-  "GPU": {
-    "num": "Vec<u8>",
-    "gpus": "Vec<GPUDetail>"
-  },
-  "GPUDetail": {
-    "grade": "Vec<u8>"
-  },
   "AccountInfo": {
     "nonce": "u32",
     "consumers": "u32",

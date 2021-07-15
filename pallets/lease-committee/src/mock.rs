@@ -401,8 +401,8 @@ pub fn new_test_with_online_machine_distribution() -> sp_io::TestExternalities {
             StakerCustomizeInfo {
                 upload_net: 10000,
                 download_net: 10000,
-                longitude: 1157894,
-                latitude: 235674,
+                longitude: -1157894,
+                latitude: -235674,
                 telecom_operators: vec!["China Unicom".into()],
                 images: vec!["Ubuntu18.04 LTS".into()],
             }

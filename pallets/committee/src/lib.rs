@@ -229,10 +229,9 @@ pub mod pallet {
             ensure!(committee_list.exist_in_committee(&committee), Error::<T>::NotCommittee);
 
             // waiting_box_pubkey不能执行该操作
-            committee_list
-                .waiting_box_pubkey
-                .binary_search(&committee)
-                .map_err(|_| Error::<T>::PubkeyNotSet)?;
+            if committee_list.waiting_box_pubkey.binary_search(&committee).is_ok() {
+                return Err(Error::<T>::PubkeyNotSet.into());
+            }
 
             CommitteeList::rm_one(&mut committee_list.normal, &committee);
             CommitteeList::add_one(&mut committee_list.chill_list, committee.clone());
