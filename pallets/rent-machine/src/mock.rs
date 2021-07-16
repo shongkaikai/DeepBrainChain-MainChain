@@ -236,7 +236,16 @@ pub fn new_test_ext_after_machine_online() -> sp_io::TestExternalities {
     let machine_id = machine_id.as_bytes().to_vec();
 
     ext.execute_with(|| {
-        // 初始化设置参数
+        // Initialize params
+
+        // init set price_ocw (0.012$)
+        assert_eq!(DBCPriceOCW::avg_price(), None);
+        for _ in 0..MAX_LEN {
+            DBCPriceOCW::add_price(12_000u64);
+        }
+        DBCPriceOCW::add_avg_price();
+        run_to_block(2);
+
         // 委员会每次抢单质押数量 (15$)
         let _ = Committee::set_staked_usd_per_order(RawOrigin::Root.into(), 15_000_000);
         // 操作时的固定费率: 10 DBC
@@ -268,21 +277,12 @@ pub fn new_test_ext_after_machine_online() -> sp_io::TestExternalities {
         // 设置机器租金支付地址
         assert_ok!(RentMachine::set_rent_fee_pot(RawOrigin::Root.into(), pot_two));
 
-        // 初始化price_ocw (0.012$)
-        assert_eq!(DBCPriceOCW::avg_price(), None);
-        for _ in 0..MAX_LEN {
-            DBCPriceOCW::add_price(12_000u64);
-        }
-        DBCPriceOCW::add_avg_price();
-        run_to_block(2);
-
         // stash 账户设置控制账户
         assert_ok!(OnlineProfile::set_controller(Origin::signed(stash), controller));
 
         // controller bond_machine
         let msg = "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a4\
                    85CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL";
-        // NOTE:  测试中签名不以0x开头
         let sig = "3abb2adb1bad83b87d61be8e55c31cec4b3fb2ecc5ee7254c8df88b1ec92e\
                    0254f4a9b010e2d8a5cce9d262e9193b76be87b46f6bef4219517cf939520bfff84";
 
@@ -361,7 +361,6 @@ pub fn new_test_ext_after_machine_online() -> sp_io::TestExternalities {
 
 pub fn run_to_block(n: BlockNumber) {
     for b in System::block_number()..=n {
-        // 当前块结束
         OnlineProfile::on_finalize(b);
         LeaseCommittee::on_finalize(b);
         Committee::on_finalize(b);
@@ -370,7 +369,6 @@ pub fn run_to_block(n: BlockNumber) {
 
         System::set_block_number(b + 1);
 
-        // 下一块初始化
         System::on_initialize(b + 1);
         LeaseCommittee::on_initialize(b + 1);
         Committee::on_initialize(b + 1);

@@ -164,7 +164,7 @@ pub struct LiveMachine {
 }
 
 impl LiveMachine {
-    /// 检查machine_id是否存
+    /// Check if machine_id exist
     fn machine_id_exist(&self, machine_id: &MachineId) -> bool {
         if let Ok(_) = self.bonding_machine.binary_search(machine_id) {
             return true;
@@ -187,21 +187,21 @@ impl LiveMachine {
         false
     }
 
-    /// 向LiveMachine某个字段添加machine_id
+    /// Add machine_id to one field of LiveMachine
     fn add_machine_id(a_field: &mut Vec<MachineId>, machine_id: MachineId) {
         if let Err(index) = a_field.binary_search(&machine_id) {
             a_field.insert(index, machine_id);
         }
     }
 
-    /// 从LiveMachine某个字段删除machine_id
+    /// Delete machine_id from one field of LiveMachine
     fn rm_machine_id(a_field: &mut Vec<MachineId>, machine_id: &MachineId) {
         if let Ok(index) = a_field.binary_search(machine_id) {
             a_field.remove(index);
         }
     }
 
-    /// 获取所有MachineId
+    /// Get all MachineId
     fn all_machine_id(self) -> Vec<MachineId> {
         let mut out = Vec::new();
         out.extend(self.bonding_machine);
@@ -214,19 +214,19 @@ impl LiveMachine {
     }
 }
 
-/// 标准GPU租用价格
+/// Standard GPU rent price Per Era
 #[derive(PartialEq, Eq, Clone, Encode, Decode, Default, RuntimeDebug)]
 pub struct StandardGpuPointPrice {
-    /// 标准GPU算力点数
+    /// Standard GPU calc points
     pub gpu_point: u64,
-    /// 标准GPu价格
+    /// Standard GPU price
     pub gpu_price: u64,
 }
 
 type BalanceOf<T> =
     <<T as pallet::Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
-/// 在线奖励系统信息统计
+/// SysInfo of onlineProfile pallet
 #[derive(PartialEq, Eq, Clone, Encode, Decode, Default, RuntimeDebug)]
 pub struct SysInfoDetail<Balance> {
     /// 在线机器的GPU的总数
@@ -1476,19 +1476,20 @@ impl<T: Config> RTOps for Pallet<T> {
     ) {
         let mut machine_info = Self::machines_info(machine_id);
         let mut sys_info = Self::sys_info();
+        let mut stash_machines = Self::stash_machines(&machine_info.machine_stash);
 
         machine_info.machine_status = new_status.clone();
         machine_info.machine_renter = renter;
 
+        let gpu_num = machine_info.machine_info_detail.committee_upload_info.gpu_num as u64;
         match new_status {
             MachineStatus::Rented => {
                 // 机器创建成功
                 Self::update_snap_by_rent_status(machine_id.to_vec(), true);
 
                 machine_info.total_rented_times += 1;
-
-                sys_info.total_rented_gpu +=
-                    machine_info.machine_info_detail.committee_upload_info.gpu_num as u64;
+                sys_info.total_rented_gpu += gpu_num;
+                stash_machines.total_rented_gpu += gpu_num;
 
                 Self::change_pos_gpu_by_rent(machine_id, true);
             }
@@ -1499,8 +1500,8 @@ impl<T: Config> RTOps for Pallet<T> {
                     Self::update_snap_by_rent_status(machine_id.to_vec(), false);
                     machine_info.total_rented_duration += rent_duration.unwrap();
 
-                    sys_info.total_rented_gpu -=
-                        machine_info.machine_info_detail.committee_upload_info.gpu_num as u64;
+                    sys_info.total_rented_gpu -= gpu_num;
+                    stash_machines.total_rented_gpu -= gpu_num;
 
                     Self::change_pos_gpu_by_rent(machine_id, false);
                 }
@@ -1510,6 +1511,7 @@ impl<T: Config> RTOps for Pallet<T> {
 
         // 改变租用时长或者租用次数
         SysInfo::<T>::put(sys_info);
+        StashMachines::<T>::insert(&machine_info.machine_stash, stash_machines);
         MachinesInfo::<T>::insert(&machine_id, machine_info);
     }
 
@@ -1526,6 +1528,7 @@ impl<T: Config> RTOps for Pallet<T> {
             staker_machine.total_rent_fee += amount;
             sys_info.total_rent_fee += amount;
         }
+
         SysInfo::<T>::put(sys_info);
         StashMachines::<T>::insert(&machine_info.machine_stash, staker_machine);
         MachinesInfo::<T>::insert(&machine_id, machine_info);
