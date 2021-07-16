@@ -146,17 +146,6 @@ impl pallet_treasury::Config for TestRuntime {
     type SpendFunds = ();
 }
 
-// parameter_types! {
-//     pub const MinimumPeriod: u64 = 5;
-// }
-
-// impl pallet_timestamp::Config for TestRuntime {
-//     type Moment = u64;
-//     type OnTimestampSet = ();
-//     type MinimumPeriod = MinimumPeriod;
-//     type WeightInfo = ();
-// }
-
 impl committee::Config for TestRuntime {
     type Currency = Balances;
     type Event = Event;
@@ -180,7 +169,6 @@ impl online_profile::Config for TestRuntime {
     type Currency = Balances;
     type Event = Event;
     type BondingDuration = BondingDuration;
-    // type ProfitReleaseDuration = ProfitReleaseDuration;
     type DbcPrice = DBCPriceOCW;
     type ManageCommittee = Committee;
 }
@@ -225,7 +213,6 @@ frame_support::construct_runtime!(
         DBCPriceOCW: dbc_price_ocw::{Module, Call, Storage, Event<T>, ValidateUnsigned},
         Treasury: pallet_treasury::{Module, Call, Storage, Config, Event<T>},
         GenericFunc: generic_func::{Module, Call, Storage, Event<T>},
-        // Timestamp: pallet_timestamp::{Module, Call, Storage, Inherent},
     }
 );
 
@@ -401,8 +388,8 @@ pub fn new_test_with_online_machine_distribution() -> sp_io::TestExternalities {
             StakerCustomizeInfo {
                 upload_net: 10000,
                 download_net: 10000,
-                longitude: -1157894,
-                latitude: -235674,
+                longitude: 1157894,
+                latitude: 235674,
                 telecom_operators: vec!["China Unicom".into()],
                 images: vec!["Ubuntu18.04 LTS".into()],
             }
