@@ -40,6 +40,7 @@ async function main() {
 
   funcMap["onlineProfile"] = {};
   funcMap["onlineProfile"]["stakePerGPU"] = api.query.onlineProfile.stakePerGPU;
+  funcMap["onlineProfile"]["sysInfo"] = api.query.onlineProfile.sysInfo;
 
   var callFunc = funcMap[args["module"]][args["func"]];
   await do_query(callFunc, ...args._).catch((error) =>

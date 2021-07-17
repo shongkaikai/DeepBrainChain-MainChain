@@ -73,6 +73,22 @@ pub struct MTLiveReportList {
     pub waiting_rechecked_report: Vec<ReportId>,
 }
 
+impl MTLiveReportList {
+    /// Add machine_id to one field of LiveMachine
+    fn add_report_id(a_field: &mut Vec<ReportId>, report_id: ReportId) {
+        if let Err(index) = a_field.binary_search(&report_id) {
+            a_field.insert(index, report_id);
+        }
+    }
+
+    /// Delete machine_id from one field of LiveMachine
+    fn rm_report_id(a_field: &mut Vec<ReportId>, report_id: ReportId) {
+        if let Ok(index) = a_field.binary_search(&report_id) {
+            a_field.remove(index);
+        }
+    }
+}
+
 /// 报告人的报告记录
 #[derive(PartialEq, Eq, Clone, Encode, Decode, Default, RuntimeDebug)]
 pub struct ReporterRecord {
@@ -617,7 +633,6 @@ pub mod pallet {
                 if let Err(index) = live_report.waiting_raw_report.binary_search(&report_id) {
                     live_report.waiting_raw_report.insert(index, report_id);
                 }
-                LiveReport::<T>::put(live_report);
 
                 report_info.report_status = ReportStatus::SubmittingRaw;
             } else {
@@ -630,7 +645,6 @@ pub mod pallet {
             committee_ops.order_status = MTOrderStatus::WaitingRaw;
             committee_ops.confirm_hash = hash;
             committee_ops.hash_time = now;
-            CommitteeOps::<T>::insert(&committee, &report_id, committee_ops);
 
             // 将订单从委员会已预订移动到已Hash
             if let Ok(index) = committee_order.booked_report.binary_search(&report_id) {
@@ -639,8 +653,12 @@ pub mod pallet {
             if let Err(index) = committee_order.hashed_report.binary_search(&report_id) {
                 committee_order.hashed_report.insert(index, report_id);
             }
-            CommitteeOrder::<T>::insert(&committee, committee_order);
 
+            if let ReportStatus::SubmittingRaw = report_info.report_status {
+                LiveReport::<T>::put(live_report);
+            }
+            CommitteeOps::<T>::insert(&committee, &report_id, committee_ops);
+            CommitteeOrder::<T>::insert(&committee, committee_order);
             ReportInfo::<T>::insert(&report_id, report_info);
             Ok(().into())
         }
@@ -958,130 +976,120 @@ impl<T: Config> Pallet<T> {
     ) {
     }
 
-    // 处理因时间而需要变化的状态
-    // 第一个委员会预订超过3个小时，进入SubmittingRaw状态
-    // 如果处于Verifying状态 1.
     fn heart_beat() {
         let now = <frame_system::Module<T>>::block_number();
         let mut live_report = Self::live_report();
         let verifying_report = live_report.verifying_report.clone();
+        let submitting_raw_report = live_report.waiting_raw_report.clone();
 
-        for a_report_id in verifying_report {
-            let mut report_info = Self::report_info(&a_report_id);
+        let half_hour = 60u64.saturated_into::<T::BlockNumber>();
+        let one_hour = 120u64.saturated_into::<T::BlockNumber>();
+        let three_hour = 360u64.saturated_into::<T::BlockNumber>();
+        let four_hour = 480u64.saturated_into::<T::BlockNumber>();
 
-            // 距离预订时间超过了3个小时，则变成submitingHash状态
-            // 如果此时，还有处于验证状态的委员会，则将其移除，不奖励，不惩罚
-            if now - report_info.report_time >= 360u64.saturated_into::<T::BlockNumber>() {
-                report_info.report_status = ReportStatus::SubmittingRaw;
-                report_info.verifying_committee = None;
-                // TODO: 更新report_info状态
-                // continue;
-            } else if let ReportStatus::Verifying = report_info.report_status {
-                let verifying_committee = report_info.verifying_committee.clone().unwrap();
-                let committee_ops = Self::committee_ops(&verifying_committee, &a_report_id);
-                if now - committee_ops.booked_time >= 120u64.saturated_into::<T::BlockNumber>() {
-                    // 第三个委员会预订后一个小时，即进入提交原始值的阶段，不再等待
-                    if report_info.booked_committee.len() >= 3 {
-                        report_info.report_status = ReportStatus::SubmittingRaw;
-                        report_info.verifying_committee = None;
-                    } else {
-                        report_info.report_status = ReportStatus::WaitingBook;
-                        report_info.verifying_committee = None;
-                    }
+        for a_report in verifying_report {
+            let mut report_info = Self::report_info(&a_report);
+
+            // 情景1
+            // 不足3小时，且报告人没有提交给原始信息，则惩罚报告人到国库，不进行奖励
+            if now - report_info.report_time <= three_hour {
+                if let ReportStatus::WaitingBook = report_info.report_status {
+                    continue;
+                }
+
+                let verifying_committee = report_info.verifying_committee.as_ref().unwrap().clone();
+                let committee_ops = Self::committee_ops(&verifying_committee, &a_report);
+
+                if committee_ops.encrypted_err_info.is_none() {
+                    <T as pallet::Config>::ManageCommittee::add_slash(
+                        report_info.reporter,
+                        report_info.reporter_stake,
+                        Vec::new(),
+                    );
+
+                    // TODO: 改变其他状态
+
+                    continue;
+                }
+
+                // 不足3小时，且委员会没有提交Hash，删除该委员会，并惩罚
+                if now - committee_ops.booked_time >= one_hour {
+                    report_info.verifying_committee = None;
+                    report_info.booked_committee.remove(report_info.booked_committee.len() - 1);
+                    report_info.report_status = ReportStatus::WaitingBook;
+
+                    MTLiveReportList::rm_report_id(&mut live_report.verifying_report, a_report);
+                    MTLiveReportList::add_report_id(&mut live_report.bookable_report, a_report);
+
+                    // slash committee
+                    <T as pallet::Config>::ManageCommittee::add_slash(
+                        verifying_committee.clone(),
+                        committee_ops.staked_balance,
+                        Vec::new(),
+                    );
+
+                    ReportInfo::<T>::insert(a_report, report_info);
+                    CommitteeOps::<T>::remove(&verifying_committee, &a_report);
+
+                    continue;
                 }
             }
 
-            ReportInfo::<T>::insert(a_report_id, report_info);
+            // 已经到3个小时
+            if now - report_info.report_time >= three_hour {
+                if let ReportStatus::WaitingBook = report_info.report_status {
+                    report_info.report_status = ReportStatus::SubmittingRaw;
 
-            // FIXME: 逻辑错误
+                    MTLiveReportList::rm_report_id(&mut live_report.verifying_report, a_report);
+                    MTLiveReportList::add_report_id(&mut live_report.waiting_raw_report, a_report);
 
-            // // 如果超过一个小时没提交Hash，则惩罚委员会，
-            // if now - committee_ops.booked_time >= 120u64.saturated_into::<T::BlockNumber>() {
-            //     // 将委员会从预订的委员会中删掉
-            //     if let Ok(index) = report_info.booked_committee.binary_search(&verifying_committee)
-            //     {
-            //         report_info.booked_committee.remove(index);
-            //     }
+                    ReportInfo::<T>::insert(a_report, report_info);
+                    continue;
+                }
 
-            //     CommitteeOps::<T>::remove(&verifying_committee, &a_report_id);
+                // 但是最后一个委员会订阅时间小于1个小时
+                let verifying_committee = report_info.verifying_committee.unwrap().clone();
+                let committee_ops = Self::committee_ops(&verifying_committee, &a_report);
 
-            //     if let Ok(index) = live_report.verifying_report.binary_search(&a_report_id) {
-            //         live_report.verifying_report.remove(index);
-            //     }
-            //     if now - report_info.report_time >= 360u64.saturated_into::<T::BlockNumber>() {
-            //         // 这时正好是3个小时, 报告状态变为等待Raw, 则移动到等待提交Raw中
-            //         report_info.report_status = ReportStatus::SubmittingRaw;
-            //         if let Err(index) = live_report.waiting_raw_report.binary_search(&a_report_id) {
-            //             live_report.waiting_raw_report.insert(index, a_report_id);
-            //         }
-            //     } else {
-            //         // 如果还不到3个小时,报告状态变为可预订的
-            //         report_info.report_status = ReportStatus::WaitingBook;
-            //         if let Err(index) = live_report.bookable_report.binary_search(&a_report_id) {
-            //             live_report.bookable_report.insert(index, a_report_id);
-            //         }
-            //     }
-            // }
+                if now - committee_ops.booked_time < one_hour {
+                    // 将最后一个委员会移除，并不惩罚
+                    report_info.verifying_committee = None;
+                    report_info.booked_committee.remove(report_info.booked_committee.len() - 1);
+                    report_info.report_status = ReportStatus::SubmittingRaw;
 
-            // // 如果超过半个小时没有收到验证码，惩罚报告人
-            // if now - committee_ops.booked_time >= 60u64.saturated_into::<T::BlockNumber>() {
-            //     // 已经提交了Hash的验证人和当前验证人为被奖励的
-            //     let mut lucky_committee = report_info.hashed_committee.clone();
-            //     if let Err(index) = lucky_committee.binary_search(&verifying_committee) {
-            //         lucky_committee.insert(index, verifying_committee.clone())
-            //     }
+                    MTLiveReportList::rm_report_id(&mut live_report.verifying_report, a_report);
+                    MTLiveReportList::add_report_id(&mut live_report.waiting_raw_report, a_report);
 
-            //     Self::encrypted_info_not_send(
-            //         report_info.reporter.clone(),
-            //         a_report_id,
-            //         lucky_committee,
-            //     );
-            // }
-
-            // 如果不是上面两种情况，距离第一个订单时间超过了3小时，将该委员会移除，不计算在内
-            // if now - report_info.report_time >= 360u64.saturated_into::<T::BlockNumber>() {
-            //     println!("##### report_id: {:?}", &a_report_id);
-
-            //     CommitteeOps::<T>::remove(&verifying_committee, &a_report_id);
-            //     // 从report_info中移除
-            //     if let Ok(index) = report_info.booked_committee.binary_search(&verifying_committee)
-            //     {
-            //         report_info.booked_committee.remove(index);
-            //     }
-            //     if let Ok(index) =
-            //         report_info.get_encrypted_info_committee.binary_search(&verifying_committee)
-            //     {
-            //         report_info.get_encrypted_info_committee.remove(index);
-            //     }
-            //     report_info.report_status = ReportStatus::SubmittingRaw;
-
-            //     // 从live_report中修改
-            //     if let Ok(index) = live_report.verifying_report.binary_search(&a_report_id) {
-            //         live_report.verifying_report.remove(index);
-            //     }
-            //     if let Err(index) = live_report.waiting_raw_report.binary_search(&a_report_id) {
-            //         live_report.waiting_raw_report.insert(index, a_report_id);
-            //     }
-            // }
-        }
-
-        for a_report_id in live_report.waiting_raw_report {
-            let report_info = Self::report_info(&a_report_id);
-            // 只有在超过了4个小时的时候才做清算
-            if now - report_info.report_time >= 480u64.saturated_into::<T::BlockNumber>() {
-                match Self::summary_report(a_report_id) {
-                    ReportConfirmStatus::Confirmed(_committees, _reason) => {
-                        // TODO: 机器有问题，则惩罚机器拥有者。
-                        // 1. 修改onlineProfile中机器状态
-                        // 2. 等待机器重新上线，再进行奖励
-                    }
-                    ReportConfirmStatus::Refuse(_committee) => {
-                        // TODO: 惩罚报告人和同意的委员会
-                    }
-                    // 无共识, 则
-                    ReportConfirmStatus::NoConsensus => {}
+                    ReportInfo::<T>::insert(a_report, report_info);
+                    continue;
                 }
             }
         }
+
+        // 正在提交原始值的
+        for a_report in submitting_raw_report {
+            let mut report_info = Self::report_info(&a_report);
+            // 未全部提交了原始信息且未达到了四个小时
+            if now - report_info.report_time < four_hour
+                && report_info.hashed_committee.len() != report_info.confirmed_committee.len()
+            {
+                continue;
+            }
+
+            match Self::summary_report(a_report) {
+                ReportConfirmStatus::Confirmed(_committees, _reason) => {
+                    // TODO: 机器有问题，则惩罚机器拥有者。
+                    // 1. 修改onlineProfile中机器状态
+                    // 2. 等待机器重新上线，再进行奖励
+                }
+                ReportConfirmStatus::Refuse(_committee) => {
+                    // TODO: 惩罚报告人和同意的委员会
+                }
+                // 无共识, 则
+                ReportConfirmStatus::NoConsensus => {}
+            }
+        }
+
+        LiveReport::<T>::put(live_report);
     }
 }

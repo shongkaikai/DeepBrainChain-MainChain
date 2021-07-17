@@ -370,22 +370,6 @@ impl<T: Config> Pallet<T> {
             .collect::<BTreeSet<_>>()
     }
 
-    pub fn add_slash(who: T::AccountId, amount: BalanceOf<T>, reward_to: Vec<T::AccountId>) {
-        let slash_id = Self::get_new_slash_id();
-        let now = <frame_system::Module<T>>::block_number();
-        PendingSlash::<T>::insert(
-            slash_id,
-            PendingSlashInfo {
-                slash_who: who,
-                slash_time: now,
-                unlock_amount: amount,
-                slash_amount: amount,
-                slash_exec_time: now + 5760u32.saturated_into::<T::BlockNumber>(),
-                reward_to,
-            },
-        );
-    }
-
     fn get_new_slash_id() -> SlashId {
         let slash_id = Self::next_slash_id();
         NextSlashId::<T>::put(slash_id + 1);
@@ -466,6 +450,22 @@ impl<T: Config> ManageCommittee for Pallet<T> {
         let raw_reward =
             Self::committee_reward(&committee).unwrap_or(0u32.saturated_into::<BalanceOf<T>>());
         CommitteeReward::<T>::insert(&committee, raw_reward + reward);
+    }
+
+    fn add_slash(who: T::AccountId, amount: BalanceOf<T>, reward_to: Vec<T::AccountId>) {
+        let slash_id = Self::get_new_slash_id();
+        let now = <frame_system::Module<T>>::block_number();
+        PendingSlash::<T>::insert(
+            slash_id,
+            PendingSlashInfo {
+                slash_who: who,
+                slash_time: now,
+                unlock_amount: amount,
+                slash_amount: amount,
+                slash_exec_time: now + 5760u32.saturated_into::<T::BlockNumber>(),
+                reward_to,
+            },
+        );
     }
 }
 

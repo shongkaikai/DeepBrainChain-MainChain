@@ -772,7 +772,7 @@ pub mod pallet {
             Ok(().into())
         }
 
-        /// 控制账户报告机器下线
+        /// Controller report to control machine offline
         #[pallet::weight(10000)]
         pub fn controller_report_offline(
             origin: OriginFor<T>,
@@ -784,11 +784,22 @@ pub mod pallet {
             let mut machine_info = Self::machines_info(&machine_id);
             ensure!(machine_info.controller == controller, Error::<T>::NotMachineController);
 
+            // TODO: currently only online machine can call this func
+            match machine_info.machine_status {
+                MachineStatus::Online => {}
+                _ => return Err(Error::<T>::NotAllowedStatus.into()),
+            }
+
+            Self::update_staker_grades_by_online_machine(
+                machine_info.machine_stash.clone(),
+                machine_id.clone(),
+                false,
+            );
+
             // TODO: 检查机器状态，在online之后，还应该是这种状态
             machine_info.machine_status =
                 MachineStatus::StakerReportOffline(now, Box::new(machine_info.machine_status));
 
-            // TODO: 应该影响机器打分
             MachinesInfo::<T>::insert(&machine_id, machine_info);
 
             Self::change_pos_gpu_by_online(&machine_id, false);
@@ -868,6 +879,7 @@ pub mod pallet {
         NotRefusedMachine,
         SigMachineIdNotEqualBondedMachineId,
         TelecomAndImageIsNull,
+        NotAllowedStatus,
     }
 }
 

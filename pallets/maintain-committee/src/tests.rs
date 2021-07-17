@@ -11,14 +11,6 @@ fn report_machine_fault_works() {
         let report_hash: [u8; 16] =
             hex::decode("986fffc16e63d3f7c43fe1a272ba3ba1").unwrap().try_into().unwrap();
 
-        // let a: [u8; 24] = hex::decode("78dd824a692abcea95648bb26086c58adb3f46d019e6738e")
-        //     .unwrap()
-        //     .try_into()
-        //     .unwrap();
-        // println!("{:?}", a);
-        // let hash = MaintainCommittee::get_hash(a.into());
-        // println!("{:?}", hash);
-
         let machine_id =
             "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
         let reporter_rand_str = "abcdef".as_bytes().to_vec();
@@ -76,11 +68,9 @@ fn report_machine_fault_works() {
             committee_hash
         ));
 
-        report_status.first_book_time = 11;
         report_status.verifying_committee = None;
         report_status.hashed_committee.push(committee);
         report_status.report_status = crate::ReportStatus::WaitingBook;
-        report_status.confirm_start = 11 + 360;
         assert_eq!(&MaintainCommittee::report_info(0), &report_status);
 
         // 3个小时之后才能提交：

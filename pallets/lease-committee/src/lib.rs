@@ -36,7 +36,6 @@ pub use rpc_types::RpcLCCommitteeOps;
 
 pub type MachineId = Vec<u8>;
 pub type EraIndex = u32;
-pub type SlashId = u64;
 type BalanceOf<T> =
     <<T as pallet::Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
@@ -136,17 +135,6 @@ struct Summary<AccountId> {
     pub unruly: Vec<AccountId>,          // 没有提交全部信息的委员会
     pub against: Vec<AccountId>,
     pub info: Option<CommitteeUploadInfo>,
-}
-
-// 即将被执行的罚款
-#[derive(PartialEq, Eq, Clone, Encode, Decode, Default, RuntimeDebug)]
-pub struct PendingSlashInfo<AccountId, BlockNumber, Balance> {
-    pub slash_who: AccountId,
-    pub slash_time: BlockNumber,      // 惩罚被创建的时间
-    pub unlock_amount: Balance,       // 执行惩罚前解绑的金额
-    pub slash_amount: Balance,        // 执行惩罚的金额
-    pub slash_exec_time: BlockNumber, // 惩罚被执行的时间
-    pub reward_to: Vec<AccountId>,    // 奖励发放对象。如果为空，则惩罚到国库
 }
 
 #[frame_support::pallet]
@@ -498,7 +486,7 @@ impl<T: Config> Pallet<T> {
             // 当不为Summary状态时查看是否到了48小时，如果不到则返回
             if machine_committee.status != LCVerifyStatus::Summarizing {
                 if now < machine_committee.book_time + SUBMIT_RAW_END.into() {
-                    return;
+                    continue;
                 }
             }
 
