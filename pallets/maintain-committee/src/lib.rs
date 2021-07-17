@@ -173,10 +173,12 @@ impl Default for MachineFaultType {
     }
 }
 
-// 最后总结的报告信息类型
+/// Summary after all committee submit raw info
 enum ReportConfirmStatus<AccountId> {
-    Confirmed(Vec<AccountId>, Vec<u8>), // 带一个错误类型
-    Refuse(Vec<AccountId>),
+    /// <SupportCommittee, AgainstCommittee, errMsg>
+    Confirmed(Vec<AccountId>, Vec<AccountId>, Vec<u8>),
+    /// <SupportCommittee, AgainstCommittee>
+    Refuse(Vec<AccountId>, Vec<AccountId>),
     NoConsensus,
 }
 
@@ -881,11 +883,7 @@ impl<T: Config> Pallet<T> {
 
     // 处理用户没有发送加密信息的订单
     // 对用户进行惩罚，对委员会进行奖励
-    fn encrypted_info_not_send(
-        _reporter: T::AccountId,
-        report_id: ReportId,
-        _reward_to: Vec<T::AccountId>,
-    ) {
+    fn encrypted_info_not_send(report_id: ReportId) {
         let report_info = Self::report_info(report_id);
 
         // 清理每个委员会存储
@@ -910,9 +908,6 @@ impl<T: Config> Pallet<T> {
         // 清理该报告
         Self::clean_from_live_report(&report_id);
         ReportInfo::<T>::remove(&report_id);
-
-        // 惩罚该用户, 添加到slash列表中: TODO: 由committee执行
-        // Self::add_slash(reporter, report_info.reporter_stake, reward_to);
     }
 
     // 从委员会的订单列表中删除
@@ -949,10 +944,9 @@ impl<T: Config> Pallet<T> {
         LiveReport::<T>::put(live_report);
     }
 
-    // 最后结果返回一个Enum类型
+    // Summary committee's handle result
     fn summary_report(report_id: ReportId) -> ReportConfirmStatus<T::AccountId> {
         let report_info = Self::report_info(&report_id);
-        // 如果没有委员会提交Raw信息，则无共识
         if report_info.confirmed_committee.len() == 0 {
             return ReportConfirmStatus::NoConsensus;
         }
@@ -960,20 +954,15 @@ impl<T: Config> Pallet<T> {
         if report_info.support_committee.len() >= report_info.against_committee.len() {
             return ReportConfirmStatus::Confirmed(
                 report_info.support_committee,
+                report_info.against_committee,
                 report_info.err_info.clone(),
             );
         }
 
-        return ReportConfirmStatus::Refuse(report_info.against_committee);
-    }
-
-    // TODO: 如果报告人不提交加密信息，则被惩罚
-    // 如果委员会不在规定时间内提交Hash信息，则被惩罚
-    fn slash_misbehavior(
-        who: T::AccountId,
-        slash_amount: BalanceOf<T>,
-        reward_to: Vec<T::AccountId>,
-    ) {
+        return ReportConfirmStatus::Refuse(
+            report_info.support_committee,
+            report_info.against_committee,
+        );
     }
 
     fn heart_beat() {
@@ -1000,14 +989,16 @@ impl<T: Config> Pallet<T> {
                 let verifying_committee = report_info.verifying_committee.as_ref().unwrap().clone();
                 let committee_ops = Self::committee_ops(&verifying_committee, &a_report);
 
-                if committee_ops.encrypted_err_info.is_none() {
+                if committee_ops.encrypted_err_info.is_none()
+                    && now - committee_ops.booked_time >= half_hour
+                {
                     <T as pallet::Config>::ManageCommittee::add_slash(
                         report_info.reporter,
                         report_info.reporter_stake,
                         Vec::new(),
                     );
 
-                    // TODO: 改变其他状态
+                    Self::encrypted_info_not_send(a_report);
 
                     continue;
                 }
@@ -1077,12 +1068,12 @@ impl<T: Config> Pallet<T> {
             }
 
             match Self::summary_report(a_report) {
-                ReportConfirmStatus::Confirmed(_committees, _reason) => {
+                ReportConfirmStatus::Confirmed(support_committees, against_committee, err_info) => {
                     // TODO: 机器有问题，则惩罚机器拥有者。
                     // 1. 修改onlineProfile中机器状态
                     // 2. 等待机器重新上线，再进行奖励
                 }
-                ReportConfirmStatus::Refuse(_committee) => {
+                ReportConfirmStatus::Refuse(support_committee, against_committee) => {
                     // TODO: 惩罚报告人和同意的委员会
                 }
                 // 无共识, 则
