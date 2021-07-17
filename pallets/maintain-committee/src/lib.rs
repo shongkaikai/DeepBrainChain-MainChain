@@ -883,7 +883,7 @@ impl<T: Config> Pallet<T> {
 
     // 处理用户没有发送加密信息的订单
     // 对用户进行惩罚，对委员会进行奖励
-    fn encrypted_info_not_send(report_id: ReportId) {
+    fn refund_committee_clean_report(report_id: ReportId) {
         let report_info = Self::report_info(report_id);
 
         // 清理每个委员会存储
@@ -979,8 +979,7 @@ impl<T: Config> Pallet<T> {
         for a_report in verifying_report {
             let mut report_info = Self::report_info(&a_report);
 
-            // 情景1
-            // 不足3小时，且报告人没有提交给原始信息，则惩罚报告人到国库，不进行奖励
+            // 不足3小时
             if now - report_info.report_time <= three_hour {
                 if let ReportStatus::WaitingBook = report_info.report_status {
                     continue;
@@ -989,6 +988,7 @@ impl<T: Config> Pallet<T> {
                 let verifying_committee = report_info.verifying_committee.as_ref().unwrap().clone();
                 let committee_ops = Self::committee_ops(&verifying_committee, &a_report);
 
+                // 报告人没有提交给原始信息，则惩罚报告人到国库，不进行奖励
                 if committee_ops.encrypted_err_info.is_none()
                     && now - committee_ops.booked_time >= half_hour
                 {
@@ -998,7 +998,7 @@ impl<T: Config> Pallet<T> {
                         Vec::new(),
                     );
 
-                    Self::encrypted_info_not_send(a_report);
+                    Self::refund_committee_clean_report(a_report);
 
                     continue;
                 }
@@ -1076,9 +1076,16 @@ impl<T: Config> Pallet<T> {
                 ReportConfirmStatus::Refuse(support_committee, against_committee) => {
                     // TODO: 惩罚报告人和同意的委员会
                 }
-                // 无共识, 则
-                ReportConfirmStatus::NoConsensus => {}
+                // No consensus, will clean record & as new report to handle
+                // In this case, no raw info is submitted, so committee record should be None
+                ReportConfirmStatus::NoConsensus => {
+                    report_info.report_status = ReportStatus::Reported;
+                    MTLiveReportList::add_report_id(&mut live_report.bookable_report, a_report);
+                    MTLiveReportList::rm_report_id(&mut live_report.verifying_report, a_report);
+                    MTLiveReportList::rm_report_id(&mut live_report.waiting_raw_report, a_report);
+                }
             }
+            ReportInfo::<T>::insert(a_report, report_info);
         }
 
         LiveReport::<T>::put(live_report);
