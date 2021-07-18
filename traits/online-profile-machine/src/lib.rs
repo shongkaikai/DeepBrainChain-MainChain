@@ -64,3 +64,14 @@ pub trait DbcPrice {
 
     fn get_dbc_amount_by_value(value: u64) -> Option<Self::BalanceOf>;
 }
+
+pub trait MTOps {
+    type AccountId;
+    type MachineId;
+
+    fn machine_offline(
+        machine_id: Self::MachineId,
+        committee: Vec<Self::AccountId>,
+        reporter: Self::AccountId,
+    );
+}

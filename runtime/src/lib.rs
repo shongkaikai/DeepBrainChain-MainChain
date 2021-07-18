@@ -1073,6 +1073,7 @@ impl maintain_committee::Config for Runtime {
     type Event = Event;
     type DbcPrice = DBCPriceOCW;
     type ManageCommittee = Committee;
+    type MTOps = OnlineProfile;
 }
 
 impl rent_machine::Config for Runtime {

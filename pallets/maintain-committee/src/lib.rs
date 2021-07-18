@@ -40,7 +40,7 @@ use frame_support::{
     traits::{Currency, LockableCurrency},
 };
 use frame_system::pallet_prelude::*;
-use online_profile_machine::{DbcPrice, ManageCommittee};
+use online_profile_machine::{DbcPrice, MTOps, ManageCommittee};
 use sp_io::hashing::blake2_128;
 use sp_runtime::{traits::SaturatedConversion, RuntimeDebug};
 use sp_std::{prelude::*, str, vec::Vec};
@@ -243,6 +243,7 @@ pub mod pallet {
             AccountId = Self::AccountId,
             BalanceOf = BalanceOf<Self>,
         >;
+        type MTOps: MTOps<AccountId = Self::AccountId, MachineId = MachineId>;
     }
 
     #[pallet::pallet]
@@ -897,7 +898,7 @@ impl<T: Config> Pallet<T> {
             )
             .is_err()
             {
-                debug::error!("### reduce committee stake failed");
+                debug::error!("Reduce committee stake failed");
             };
 
             CommitteeOps::<T>::remove(&a_committee, &report_id);
@@ -1068,13 +1069,63 @@ impl<T: Config> Pallet<T> {
             }
 
             match Self::summary_report(a_report) {
-                ReportConfirmStatus::Confirmed(support_committees, against_committee, err_info) => {
-                    // TODO: 机器有问题，则惩罚机器拥有者。
-                    // 1. 修改onlineProfile中机器状态
-                    // 2. 等待机器重新上线，再进行奖励
+                ReportConfirmStatus::Confirmed(
+                    support_committees,
+                    against_committee,
+                    _err_info,
+                ) => {
+                    for a_committee in against_committee.clone() {
+                        let committee_ops = Self::committee_ops(&a_committee, a_report);
+                        T::ManageCommittee::add_slash(
+                            report_info.reporter.clone(),
+                            committee_ops.staked_balance,
+                            Vec::new(),
+                        );
+                    }
+
+                    for a_committee in support_committees.clone() {
+                        let committee_ops = Self::committee_ops(&a_committee, a_report);
+                        if let Err(e) = T::ManageCommittee::change_stake(
+                            &a_committee,
+                            committee_ops.staked_balance,
+                            false,
+                        ) {
+                            debug::error!("Change stake of {:?} failed: {:?}", &a_committee, e);
+                        }
+                    }
+
+                    T::MTOps::machine_offline(
+                        report_info.machine_id.clone(),
+                        report_info.support_committee.clone(),
+                        report_info.reporter.clone(),
+                    );
                 }
                 ReportConfirmStatus::Refuse(support_committee, against_committee) => {
-                    // TODO: 惩罚报告人和同意的委员会
+                    for a_committee in support_committee {
+                        let committee_ops = Self::committee_ops(a_committee.clone(), a_report);
+                        T::ManageCommittee::add_slash(
+                            a_committee,
+                            committee_ops.staked_balance,
+                            against_committee.clone(),
+                        );
+                    }
+
+                    for a_committee in against_committee.clone() {
+                        let committee_ops = Self::committee_ops(&a_committee, a_report);
+                        if let Err(e) = T::ManageCommittee::change_stake(
+                            &a_committee,
+                            committee_ops.staked_balance,
+                            false,
+                        ) {
+                            debug::error!("Change stake of {:?} failed: {:?}", &a_committee, e);
+                        };
+                    }
+
+                    T::ManageCommittee::add_slash(
+                        report_info.reporter.clone(),
+                        report_info.reporter_stake,
+                        against_committee.clone(),
+                    );
                 }
                 // No consensus, will clean record & as new report to handle
                 // In this case, no raw info is submitted, so committee record should be None
