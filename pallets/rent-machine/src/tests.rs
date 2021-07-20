@@ -73,3 +73,53 @@ fn should_works() {
         assert_eq!(era_grade_snap.total, 6828) // 6824 * 4 / 10000 + 6825
     })
 }
+
+#[test]
+fn controller_report_offline_when_online_should_work() {
+    new_test_with_online_machine_online_ext().execute_with(|| {
+        let controller: sp_core::sr25519::Public =
+            sr25519::Public::from(Sr25519Keyring::Eve).into();
+        let stash: sp_core::sr25519::Public = sr25519::Public::from(Sr25519Keyring::Ferdie).into();
+        let machine_id =
+            "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
+
+        run_to_block(50);
+
+        assert_ok!(OnlineProfile::controller_report_offline(
+            Origin::signed(controller),
+            machine_id.clone()
+        ));
+    })
+}
+
+// Case1: after report online, machine status is still rented
+#[test]
+fn controller_report_offline_when_rented_should_work1() {
+    new_test_with_online_machine_online_ext().execute_with(|| {
+        let controller: sp_core::sr25519::Public =
+            sr25519::Public::from(Sr25519Keyring::Eve).into();
+        let stash: sp_core::sr25519::Public = sr25519::Public::from(Sr25519Keyring::Ferdie).into();
+        let machine_id =
+            "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
+
+        run_to_block(50);
+
+        // 机器报告下线，查询存储
+
+        // 机器报告上线，查询存储
+    })
+}
+
+// Case2: after report online, machine is out of rent duration
+#[test]
+fn controller_report_offline_when_rented_should_work2() {
+    new_test_with_online_machine_online_ext().execute_with(|| {
+        let controller: sp_core::sr25519::Public =
+            sr25519::Public::from(Sr25519Keyring::Eve).into();
+        let stash: sp_core::sr25519::Public = sr25519::Public::from(Sr25519Keyring::Ferdie).into();
+        let machine_id =
+            "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
+
+        run_to_block(50);
+    })
+}

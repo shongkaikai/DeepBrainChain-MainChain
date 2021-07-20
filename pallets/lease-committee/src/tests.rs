@@ -173,7 +173,7 @@ fn machine_online_works() {
                 total_claimed_reward: 0,
                 can_claim_reward: 272250 * ONE_DBC, // (1100000 * 25% * 99% = 272250 DBC) * 2 + (825000 * 1/150 * 0.99 = 544.5) = 545044.5
 
-                linear_release_reward: vec![825_000 * ONE_DBC].into_iter().collect(), // 1100000 * 75% = 8250000 DBC
+                linear_release_reward: vec![0, 825_000 * ONE_DBC].into_iter().collect(), // 1100000 * 75% = 8250000 DBC
                 total_rent_fee: 0,
                 total_burn_fee: 0,
 
@@ -198,7 +198,7 @@ fn machine_online_works() {
                 total_claimed_reward: 0,
                 can_claim_reward: 549944999455500000000, // (1100000 * 25% * 99% = 272250 DBC) * 2 + (825000 * 1/150 * 0.99 = 825000 * 6666666/10**9 * 0.99 = 5444.9994555 * 10^15 ) = 549944.9994555 // 相差 0.0005444
 
-                linear_release_reward: vec![825_000 * ONE_DBC, 825_000 * ONE_DBC]
+                linear_release_reward: vec![0, 825_000 * ONE_DBC, 825_000 * ONE_DBC]
                     .into_iter()
                     .collect(),
                 total_rent_fee: 0,
@@ -225,7 +225,7 @@ fn machine_online_works() {
                 total_claimed_reward: 549944999455500000000,
                 can_claim_reward: 0,
 
-                linear_release_reward: vec![825_000 * ONE_DBC, 825_000 * ONE_DBC]
+                linear_release_reward: vec![0, 825_000 * ONE_DBC, 825_000 * ONE_DBC]
                     .into_iter()
                     .collect(),
                 total_rent_fee: 0,
@@ -378,4 +378,9 @@ fn committee_not_wubmit_raw_slash_works() {
         let machine_id =
             "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
     })
+}
+
+#[test]
+fn fulfill_should_work() {
+    new_test_with_online_machine_distribution().execute_with(|| {})
 }
