@@ -81,29 +81,38 @@
   {
       "jsonrpc": "2.0",
       "result": {
-          "calcPoints": 3310,
-          "gpuNum": 4,
-          "totalReward": "0"
-      },
-      "id": 1{
-      "jsonrpc": "2.0",
-      "result": {
-          "bondedMachines": [
+          "bondedMachines": [ // 每个机器的算力点数
               {
-                  "calcPoint": 0,
-                  "gpuNum": 0,
-                  "machineId": [
-                      56, 101, 97, 102, 48, 52, 49, 53, 49, 54, 56, 55, 55, ...
-                  ],
-                  "machineStatus": "addingCustomizeInfo"
+                  "calcPoint": 6825, // 机器的算力点数
+                  "gpuNum": 4, // 机器的GPU数量
+                  "machineId": [56, 101, 97, 102, 48, 52, 49, 53, 49, 54, ...], // 机器的machine_id
+                  "machineStatus": "online" // 机器的状态
               }
           ],
-          "calcPoints": 0,
-          "gpuNum": 0,
-          "totalReward": "0"
+          "stashStatistic": {
+              "canClaimReward": "1415699994555000000000", // 可以领取的奖励
+              "linearReleaseReward": [ // 线性释放的奖励,即每天总奖励减去立即释放的25%奖励后，剩下的75%的奖励。
+                  "825000000000000000000", 
+                  "825000000000000000000",
+                  "825000000000000000000", // 前3天的奖励
+                  "825000000000000000000", // 前2天的奖励
+                  "825000000000000000000" // 前1天的奖励
+              ],
+              "onlineMachine": [
+                  [56, 101, 97, 102, 48, 52, 49, 53, 49, 54, ...] // 该stash账户上线的机器ID
+              ],
+              "totalBurnFee": "0", // 银河竞赛开启后，总
+              "totalCalcPoints": 6825, // 该账户下，机器的总算力值
+              "totalClaimedReward": "0", // 该账户已经领取的奖励数量
+              "totalGpuNum": 4, // 该账户下机器的总CPU数量
+              "totalMachine": [
+                  [56, 101, 97, 102, 48, 52, 49, 53, 49, 54, ...] // 该账户下所有的机器ID
+              ],
+              "totalRentFee": "0", // 银河竞赛开启前，获得的租金数量
+              "totalRentedGpu": 0 // 该账户下机器被租用的GPU数量
+          }
       },
       "id": 1
-  }
   }
   ```
   
