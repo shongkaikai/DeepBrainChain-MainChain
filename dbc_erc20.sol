@@ -8,7 +8,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.2.0/contr
 contract DBCERC20 is ERC20PresetMinterPauser {
     bytes32 public constant BURN_ROLE = keccak256("BURN_ROLE");
 
-    constructor() ERC20PresetMinterPauser("Deepbrainchain Token", "DBC") {
+    constructor() ERC20PresetMinterPauser("DeepBrainChain Token", "DBC") {
         _setupRole(BURN_ROLE, _msgSender());
     }
 
