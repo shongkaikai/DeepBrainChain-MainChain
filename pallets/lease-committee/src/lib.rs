@@ -375,6 +375,10 @@ impl<T: Config> Pallet<T> {
     pub fn distribute_machines() {
         let live_machines = <online_profile::Pallet<T>>::live_machines();
         for a_machine_id in live_machines.confirmed_machine {
+            if MachineCommittee::<T>::contains_key(&a_machine_id) {
+                MachineCommittee::<T>::remove(&a_machine_id);
+            }
+
             debug::warn!("Distribute machine: {:?}", &a_machine_id);
             let _ = Self::distribute_one_machine(&a_machine_id);
         }
