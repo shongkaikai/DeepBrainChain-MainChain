@@ -150,7 +150,9 @@ where
         if is_online {
             staker_statistic.online_gpu_num += gpu_num;
         } else {
-            staker_statistic.online_gpu_num -= gpu_num;
+            // 避免上线24小时即下线时，当前Era还没有初始化该值
+            staker_statistic.online_gpu_num =
+                staker_statistic.online_gpu_num.checked_sub(gpu_num).unwrap_or_default();
         }
 
         // 根据显卡数量n更新inflation系数: inflation = min(10%, n/10000)
@@ -165,7 +167,10 @@ where
         if is_online {
             staker_statistic.machine_total_calc_point += basic_grade;
         } else {
-            staker_statistic.machine_total_calc_point -= basic_grade;
+            staker_statistic.machine_total_calc_point = staker_statistic
+                .machine_total_calc_point
+                .checked_sub(basic_grade)
+                .unwrap_or_default();
         }
 
         // 更新系统分数记录
