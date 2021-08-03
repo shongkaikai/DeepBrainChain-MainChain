@@ -70,7 +70,7 @@ impl CommitteeUploadInfo {
         raw_info.extend(self.rand_str.clone());
         raw_info.extend(is_support);
 
-        return blake2_128(&raw_info);
+        return blake2_128(&raw_info)
     }
 }
 
