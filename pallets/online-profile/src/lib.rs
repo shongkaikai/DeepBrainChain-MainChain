@@ -632,16 +632,7 @@ pub mod pallet {
             new_stash_machine: StashMachine<BalanceOf<T>>,
         ) -> DispatchResultWithPostInfo {
             ensure_root(origin)?;
-            let mut stash_machine = Self::stash_machines(&stash);
-
-            stash_machine = StashMachine {
-                total_machine: stash_machine.total_machine.clone(),
-                online_machine: stash_machine.online_machine.clone(),
-                ..new_stash_machine
-            };
-
-            StashMachines::<T>::insert(stash, stash_machine);
-
+            StashMachines::<T>::insert(stash, new_stash_machine);
             Ok(().into())
         }
 

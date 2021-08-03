@@ -56,18 +56,18 @@
     "reward_deadline": "BlockNumber"
   },
   "MachineStatus": {
-    "_enum": [
-      "AddingCustomizeInfo",
-      "DistributingOrder",
-      "CommitteeVerifying",
-      "CommitteeRefused(BlockNumber)",
-      "WaitingFulfill",
-      "Online",
-      "StakerReportOffline(BlockNumber, Box<MachineStatus>)",
-      "ReporterReportOffline(BlockNumber)",
-      "Creating",
-      "Rented"
-    ]
+    "_enum": {
+      "AddingCustomizeInfo": null,
+      "DistributingOrder": null,
+      "CommitteeVerifying": null,
+      "CommitteeRefused": "BlockNumber",
+      "WaitingFulfill": null,
+      "Online": null,
+      "StakerReportOffline": "(BlockNumber, Box<MachineStatus>)",
+      "ReporterReportOffline": "BlockNumber",
+      "Creating": null,
+      "Rented": null
+    }
   },
   "MachineInfoDetail": {
     "committee_upload_info": "CommitteeUploadInfo",
