@@ -625,6 +625,39 @@ pub mod pallet {
             Ok(().into())
         }
 
+        /// stash账户为MachineId设置新的控制账户
+        #[pallet::weight(10000)]
+        pub fn stash_reset_controller(
+            origin: OriginFor<T>,
+            machine_id: MachineId,
+            new_controller: T::AccountId,
+        ) -> DispatchResultWithPostInfo {
+            let stash = ensure_signed(origin)?;
+            let mut machine_info = Self::machines_info(&machine_id);
+
+            let raw_controller = machine_info.controller.clone();
+            let mut raw_controller_machines = Self::controller_machines(&raw_controller);
+            let mut new_controller_machines = Self::controller_machines(&new_controller);
+
+            ensure!(machine_info.machine_stash == stash, Error::<T>::NotMachineStash);
+            machine_info.controller = new_controller.clone();
+
+            // 更改controller_machines
+            if let Ok(index) = raw_controller_machines.binary_search(&machine_id) {
+                raw_controller_machines.remove(index);
+
+                if let Err(index) = new_controller_machines.binary_search(&machine_id) {
+                    new_controller_machines.insert(index, machine_id.clone());
+                    ControllerMachines::<T>::insert(&raw_controller, raw_controller_machines);
+                    ControllerMachines::<T>::insert(&new_controller, new_controller_machines);
+                }
+            }
+
+            MachinesInfo::<T>::insert(machine_id, machine_info);
+
+            Ok(().into())
+        }
+
         #[pallet::weight(0)]
         pub fn root_set_stash_machine(
             origin: OriginFor<T>,
@@ -1100,6 +1133,7 @@ pub mod pallet {
         SigMachineIdNotEqualBondedMachineId,
         TelecomAndImageIsNull,
         MachineStatusNotAllowed,
+        NotMachineStash,
     }
 }
 
