@@ -17,7 +17,7 @@ import minimist from "minimist";
 async function main() {
   // 读取参数
   var args = minimist(process.argv.slice(2), {
-    string: ["key", "sig", "hash"],
+    string: ["key", "sig", "hash", "cusinfo"],
   });
 
   if (args.hasOwnProperty("sig")) {
@@ -26,6 +26,10 @@ async function main() {
 
   if (args.hasOwnProperty("hash")) {
     args._.push(args["hash"]);
+  }
+
+  if (args.hasOwnProperty("cusinfo")) {
+    args._.push(args["cusinfo"]);
   }
 
   // 构建连接

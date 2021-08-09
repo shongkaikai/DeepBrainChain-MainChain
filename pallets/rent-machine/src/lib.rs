@@ -146,6 +146,35 @@ pub mod pallet {
         }
 
         #[pallet::weight(0)]
+        pub fn root_add_user_rented(
+            origin: OriginFor<T>,
+            renter: T::AccountId,
+            rented: Vec<MachineId>,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+            UserRented::<T>::insert(renter, rented);
+            Ok(().into())
+        }
+
+        #[pallet::weight(0)]
+        pub fn root_add_rent_order(
+            origin: OriginFor<T>,
+            renter: T::AccountId,
+            machine_id: MachineId,
+            rent_detail: RentOrderDetail<T::AccountId, T::BlockNumber, BalanceOf<T>>,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+            let now = <frame_system::Module<T>>::block_number();
+
+            let mut rent_detail = rent_detail;
+            rent_detail.rent_end = rent_detail.rent_end - rent_detail.rent_start + now;
+            rent_detail.rent_start = now;
+
+            RentOrder::<T>::insert(renter, machine_id, rent_detail);
+            Ok(().into())
+        }
+
+        #[pallet::weight(0)]
         pub fn root_rent_machine(
             origin: OriginFor<T>,
             renter: T::AccountId,

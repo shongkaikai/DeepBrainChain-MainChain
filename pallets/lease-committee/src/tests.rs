@@ -16,8 +16,9 @@ fn machine_online_works() {
             sr25519::Public::from(Sr25519Keyring::Eve).into();
         let stash: sp_core::sr25519::Public = sr25519::Public::from(Sr25519Keyring::Ferdie).into();
         // Bob pubkey
-        let machine_id =
-            "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
+        let machine_id = "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48"
+            .as_bytes()
+            .to_vec();
         let msg = "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48\
                    5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL";
         let sig = "3abb2adb1bad83b87d61be8e55c31cec4b3fb2ecc5ee7254c8df88b1ec92e025\
@@ -280,8 +281,9 @@ fn all_committee_submit_works() {
         let committee4: sp_core::sr25519::Public =
             sr25519::Public::from(Sr25519Keyring::Eve).into();
 
-        let machine_id =
-            "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
+        let machine_id = "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48"
+            .as_bytes()
+            .to_vec();
 
         // 查询机器中对应的委员会列表
         assert_eq!(
@@ -376,8 +378,9 @@ fn committee_not_submit_hash_slash_works() {
         let committee4: sp_core::sr25519::Public =
             sr25519::Public::from(Sr25519Keyring::Eve).into();
 
-        let machine_id =
-            "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
+        let machine_id = "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48"
+            .as_bytes()
+            .to_vec();
 
         // 三个委员会提交Hash
         let machine_base_info = CommitteeUploadInfo {
@@ -487,8 +490,9 @@ fn committee_not_wubmit_raw_slash_works() {
         let committee4: sp_core::sr25519::Public =
             sr25519::Public::from(Sr25519Keyring::Eve).into();
 
-        let machine_id =
-            "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48".as_bytes().to_vec();
+        let machine_id = "8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48"
+            .as_bytes()
+            .to_vec();
     })
 }
 

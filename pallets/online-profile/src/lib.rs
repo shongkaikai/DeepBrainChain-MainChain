@@ -114,44 +114,6 @@ pub struct MachineInfo<AccountId: Ord, BlockNumber, Balance> {
     pub reward_deadline: BlockNumber,
 }
 
-/// 机器的信息: 更新之后的存储
-#[derive(PartialEq, Eq, Clone, Encode, Decode, Default, RuntimeDebug)]
-pub struct MachineInfo2<AccountId: Ord, BlockNumber, Balance> {
-    /// 绑定机器的人
-    pub controller: AccountId,
-    /// 奖励发放账户(机器内置钱包地址)
-    pub machine_stash: AccountId,
-    /// 当前机器的租用者
-    pub machine_renter: Option<AccountId>,
-    /// 记录机器第一次绑定上线的时间
-    pub bonding_height: BlockNumber,
-    /// 机器被委员会确认之后，正式上线时间
-    pub online_height: BlockNumber, // TODO: 链升级新加字段
-    /// 最近一次机器上线时间，机器主动下线后再次上线更新该字段。用以限制机器一天内不能两次调用上线方法
-    /// 机器24一天内，最多下线--上线(更新该字段)--下线--等待24小时再上线
-    pub latest_online_height: BlockNumber, // TODO: 链升级新加字段
-    /// 该机器质押数量
-    pub stake_amount: Balance,
-    /// 机器的状态
-    pub machine_status: MachineStatus<BlockNumber>,
-    // /// 机器线性释放的奖励
-    // pub linear_release_reward: VecDeque<Balance>,
-    /// 总租用累计时长
-    pub total_rented_duration: u64,
-    /// 总租用次数
-    pub total_rented_times: u64,
-    /// 总租金收益(银河竞赛前获得)
-    pub total_rent_fee: Balance,
-    /// 总销毁数量
-    pub total_burn_fee: Balance,
-    /// 委员会提交的机器信息与用户自定义的信息
-    pub machine_info_detail: MachineInfoDetail,
-    /// 列表中的委员将分得用户每天奖励的1%
-    pub reward_committee: Vec<AccountId>,
-    /// 列表中委员分得奖励结束时间
-    pub reward_deadline: BlockNumber,
-}
-
 /// 机器状态
 #[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug)]
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
@@ -210,22 +172,22 @@ impl LiveMachine {
     /// Check if machine_id exist
     fn machine_id_exist(&self, machine_id: &MachineId) -> bool {
         if let Ok(_) = self.bonding_machine.binary_search(machine_id) {
-            return true
+            return true;
         }
         if let Ok(_) = self.confirmed_machine.binary_search(machine_id) {
-            return true
+            return true;
         }
         if let Ok(_) = self.booked_machine.binary_search(machine_id) {
-            return true
+            return true;
         }
         if let Ok(_) = self.online_machine.binary_search(machine_id) {
-            return true
+            return true;
         }
         if let Ok(_) = self.fulfilling_machine.binary_search(machine_id) {
-            return true
+            return true;
         }
         if let Ok(_) = self.refused_machine.binary_search(machine_id) {
-            return true
+            return true;
         }
         false
     }
@@ -294,6 +256,8 @@ pub struct PosInfo {
 
 #[frame_support::pallet]
 pub mod pallet {
+    use frame_support::dispatch::DispatchResult;
+
     use super::*;
 
     #[pallet::config]
@@ -381,17 +345,6 @@ pub mod pallet {
         Blake2_128Concat,
         MachineId,
         MachineInfo<T::AccountId, T::BlockNumber, BalanceOf<T>>,
-        ValueQuery,
-    >;
-
-    /// 机器的详细信息
-    #[pallet::storage]
-    #[pallet::getter(fn machines_info2)]
-    pub type MachinesInfo2<T: Config> = StorageMap<
-        _,
-        Blake2_128Concat,
-        MachineId,
-        MachineInfo2<T::AccountId, T::BlockNumber, BalanceOf<T>>,
         ValueQuery,
     >;
 
@@ -679,6 +632,126 @@ pub mod pallet {
             Ok(().into())
         }
 
+        #[pallet::weight(0)]
+        pub fn root_add_machine_info(
+            origin: OriginFor<T>,
+            machine_id: MachineId,
+            machine_info: MachineInfo<T::AccountId, T::BlockNumber, BalanceOf<T>>,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+
+            let mut machine_info = machine_info;
+            let now = <frame_system::Module<T>>::block_number();
+            machine_info.bonding_height = now;
+
+            MachinesInfo::<T>::insert(machine_id, machine_info);
+
+            Ok(().into())
+        }
+
+        #[pallet::weight(0)]
+        pub fn root_add_stash_machine(
+            origin: OriginFor<T>,
+            stash: T::AccountId,
+            stash_machine: StashMachine<BalanceOf<T>>,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+
+            let mut stash_machine = stash_machine;
+
+            let mut linear_release = 0u32.saturated_into::<BalanceOf<T>>();
+            for a_reward in stash_machine.linear_release_reward {
+                linear_release += a_reward;
+            }
+
+            let mut linear = VecDeque::new();
+            linear.push_back(linear_release);
+
+            stash_machine.linear_release_reward = linear;
+
+            StashMachines::<T>::insert(stash, stash_machine);
+
+            Ok(().into())
+        }
+
+        #[pallet::weight(0)]
+        pub fn root_add_live_machine(
+            origin: OriginFor<T>,
+            live_machine: LiveMachine,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+            LiveMachines::<T>::put(live_machine);
+            Ok(().into())
+        }
+
+        #[pallet::weight(0)]
+        pub fn root_add_controller_machines(
+            origin: OriginFor<T>,
+            controller: T::AccountId,
+            controller_machines: Vec<MachineId>,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+
+            Ok(().into())
+        }
+
+        #[pallet::weight(0)]
+        pub fn root_add_sys_info(
+            origin: OriginFor<T>,
+            sys_info: SysInfoDetail<BalanceOf<T>>,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+            SysInfo::<T>::put(sys_info);
+            Ok(().into())
+        }
+
+        // #[pallet::weight(0)]
+        // pub fn root_add_pos_info(
+        //     origin: OriginFor<T>,
+        //     pos_gpu_info: PosInfo,
+        // ) -> DispatchResultWithPostInfo {
+        //     ensure_root(origin)?;
+        //     PosGPUInfo::<T>::insert();
+        //     Ok(().into())
+        // }
+
+        #[pallet::weight(0)]
+        pub fn root_set_stash_controller(
+            origin: OriginFor<T>,
+            stash: T::AccountId,
+            controller: T::AccountId,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+            ControllerStash::<T>::insert(controller.clone(), stash.clone());
+            StashController::<T>::insert(stash, controller);
+            Ok(().into())
+        }
+
+        // TODO: should change current era and next era
+        #[pallet::weight(0)]
+        pub fn root_set_era_stash_points(
+            origin: OriginFor<T>,
+            era_index: EraIndex,
+            era_stash_points: EraStashPoints<T::AccountId>,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+
+            ErasStashPoints::<T>::insert(era_index, era_stash_points);
+
+            Ok(().into())
+        }
+
+        #[pallet::weight(0)]
+        pub fn root_set_era_machine_points(
+            origin: OriginFor<T>,
+            era_index: EraIndex,
+            era_machine_points: BTreeMap<MachineId, MachineGradeStatus<T::AccountId>>,
+        ) -> DispatchResultWithPostInfo {
+            ensure_root(origin)?;
+            ErasMachinePoints::<T>::insert(era_index, era_machine_points);
+            Ok(().into())
+        }
+
         /// 控制账户重新上架机器，允许修改机器配置，委员会重新审核
         /// NOTE: 用户需要重新添加机器信息，添加机器信息时，检查机器状态，根据掉线时长扣钱
         #[pallet::weight(10000)]
@@ -696,7 +769,7 @@ pub mod pallet {
 
             // 只允许在线状态的机器修改信息
             match machine_info.machine_status {
-                MachineStatus::Online => {},
+                MachineStatus::Online => {}
                 _ => return Err(Error::<T>::MachineStatusNotAllowed.into()),
             }
 
@@ -706,7 +779,7 @@ pub mod pallet {
             if T::ManageCommittee::change_stake(&machine_info.machine_stash, stake_amount, true)
                 .is_err()
             {
-                return Err(Error::<T>::PayTxFeeFailed.into())
+                return Err(Error::<T>::PayTxFeeFailed.into());
             }
             UserReonlineStake::<T>::insert(&machine_info.machine_stash, &machine_id, stake_amount);
 
@@ -754,7 +827,7 @@ pub mod pallet {
 
             // 验证签名是否为MachineId发出
             if Self::verify_sig(msg.clone(), sig.clone(), machine_id.clone()).is_none() {
-                return Err(Error::<T>::BadSignature.into())
+                return Err(Error::<T>::BadSignature.into());
             }
 
             // 用户绑定机器需要质押一张显卡的DBC
@@ -813,10 +886,10 @@ pub mod pallet {
         ) -> DispatchResultWithPostInfo {
             let controller = ensure_signed(origin)?;
 
-            if customize_machine_info.telecom_operators.len() == 0 ||
-                customize_machine_info.images.len() == 0
+            if customize_machine_info.telecom_operators.len() == 0
+                || customize_machine_info.images.len() == 0
             {
-                return Err(Error::<T>::TelecomAndImageIsNull.into())
+                return Err(Error::<T>::TelecomAndImageIsNull.into());
             }
 
             // 查询机器Id是否在该账户的控制下
@@ -824,13 +897,13 @@ pub mod pallet {
             ensure!(machine_info.controller == controller, Error::<T>::NotMachineController);
 
             match machine_info.machine_status {
-                MachineStatus::AddingCustomizeInfo |
-                MachineStatus::CommitteeVerifying |
-                MachineStatus::CommitteeRefused(_) |
-                MachineStatus::WaitingFulfill |
-                MachineStatus::StakerReportOffline(_, _) => {
+                MachineStatus::AddingCustomizeInfo
+                | MachineStatus::CommitteeVerifying
+                | MachineStatus::CommitteeRefused(_)
+                | MachineStatus::WaitingFulfill
+                | MachineStatus::StakerReportOffline(_, _) => {
                     machine_info.machine_info_detail.staker_customize_info = customize_machine_info;
-                },
+                }
                 _ => return Err(Error::<T>::NotAllowedChangeMachineInfo.into()),
             }
 
@@ -922,7 +995,7 @@ pub mod pallet {
 
             ensure!(machine_info.controller == controller, Error::<T>::NotMachineController);
             match machine_info.machine_status {
-                MachineStatus::CommitteeRefused(_) => {},
+                MachineStatus::CommitteeRefused(_) => {}
                 _ => return Err(Error::<T>::NotRefusedMachine.into()),
             }
 
@@ -999,7 +1072,7 @@ pub mod pallet {
 
             // 某些状态允许下线
             match machine_info.machine_status {
-                MachineStatus::Online | MachineStatus::Rented => {},
+                MachineStatus::Online | MachineStatus::Rented => {}
                 _ => return Err(Error::<T>::MachineStatusNotAllowed.into()),
             }
 
@@ -1054,8 +1127,8 @@ pub mod pallet {
                             stash_machine.online_machine.insert(index, machine_id.clone());
                         }
                         stash_machine.total_gpu_num += gpu_num;
-                    },
-                    _ => {},
+                    }
+                    _ => {}
                 }
                 if let MachineStatus::Rented = machine_info.machine_status {
                     sys_info.total_rented_gpu += gpu_num;
@@ -1067,7 +1140,7 @@ pub mod pallet {
 
                 // TODO: Slash depend on offline time
             } else {
-                return Err(Error::<T>::MachineStatusNotAllowed.into())
+                return Err(Error::<T>::MachineStatusNotAllowed.into());
             }
 
             LiveMachine::rm_machine_id(&mut live_machine.refused_machine, &machine_id);
@@ -1221,8 +1294,8 @@ impl<T: Config> Pallet<T> {
             &committee_upload_info.machine_id,
         );
         let reward_each_get =
-            Perbill::from_rational_approximation(1, reported_committee.len() as u64) *
-                reonline_stake;
+            Perbill::from_rational_approximation(1, reported_committee.len() as u64)
+                * reonline_stake;
         if T::ManageCommittee::change_stake(&machine_info.machine_stash, reonline_stake, false)
             .is_ok()
         {
@@ -1302,7 +1375,7 @@ impl<T: Config> Pallet<T> {
     fn clean_refused_machine() {
         let mut live_machines = Self::live_machines();
         if live_machines.refused_machine.len() == 0 {
-            return
+            return;
         }
 
         let mut sys_info = Self::sys_info();
@@ -1327,7 +1400,7 @@ impl<T: Config> Pallet<T> {
                             false,
                         ) {
                             debug::error!("Reduce user stake failed");
-                            continue
+                            continue;
                         }
                         if let Some(value) =
                             sys_info.total_stake.checked_sub(&machine_info.stake_amount)
@@ -1335,7 +1408,7 @@ impl<T: Config> Pallet<T> {
                             sys_info.total_stake = value;
                         } else {
                             debug::error!("Reduce total stake failed");
-                            continue
+                            continue;
                         }
 
                         let mut controller_machines =
@@ -1356,8 +1429,8 @@ impl<T: Config> Pallet<T> {
                         StashMachines::<T>::insert(&machine_info.machine_stash, stash_machines);
                         MachinesInfo::<T>::remove(a_machine);
                     }
-                },
-                _ => {},
+                }
+                _ => {}
             }
         }
         if live_machines_is_changed {
@@ -1391,7 +1464,7 @@ impl<T: Config> Pallet<T> {
 
         let length = bs58::decode(addr).into(&mut data).ok()?;
         if length != 35 {
-            return None
+            return None;
         }
 
         let (_prefix_len, _ident) = match data[0] {
@@ -1429,7 +1502,7 @@ impl<T: Config> Pallet<T> {
 
         return base_stake
             .min(stake_limit)
-            .checked_mul(&gpu_num.saturated_into::<BalanceOf<T>>())
+            .checked_mul(&gpu_num.saturated_into::<BalanceOf<T>>());
     }
 
     /// 根据GPU数量和该机器算力点数，计算该机器相比标准配置的租用价格
@@ -1450,7 +1523,7 @@ impl<T: Config> Pallet<T> {
         let reward_start_era = Self::reward_start_era()? as u64;
 
         if current_era < reward_start_era {
-            return None
+            return None;
         }
 
         let era_duration = current_era - reward_start_era;
@@ -1467,7 +1540,7 @@ impl<T: Config> Pallet<T> {
             Self::phase_4_reward_per_era()
         };
 
-        return reward_per_era
+        return reward_per_era;
     }
 
     // 扣除n天剩余奖励
@@ -1506,7 +1579,7 @@ impl<T: Config> Pallet<T> {
         let next_era_stash_snapshot = Self::eras_stash_points(era_index).unwrap_or_default();
 
         if let Some(stash_snapshot) = next_era_stash_snapshot.staker_statistic.get(stash) {
-            return stash_snapshot.total_grades().unwrap()
+            return stash_snapshot.total_grades().unwrap();
         }
         0
     }
@@ -1704,7 +1777,7 @@ impl<T: Config> Pallet<T> {
                         era_stash_points.staker_statistic.get(&machine_info.machine_stash);
 
                     if machine_points.is_none() || stash_points.is_none() {
-                        continue
+                        continue;
                     }
                     let machine_points = machine_points.unwrap();
                     let stash_points = stash_points.unwrap();
@@ -1817,7 +1890,7 @@ impl<T: Config> LCOps for Pallet<T> {
 
         if let MachineStatus::StakerReportOffline(..) = machine_info.machine_status {
             Self::lc_confirm_machine_reonline(reported_committee, committee_upload_info)?;
-            return Ok(())
+            return Ok(());
         }
 
         LiveMachine::rm_machine_id(
@@ -1867,7 +1940,7 @@ impl<T: Config> LCOps for Pallet<T> {
             Self::update_snap_by_online_status(committee_upload_info.machine_id, true);
         }
 
-        return Ok(())
+        return Ok(());
     }
 
     // 当委员会达成统一意见，拒绝机器时，机器状态改为委员会拒绝。并记录拒绝时间。
@@ -1940,7 +2013,7 @@ impl<T: Config> RTOps for Pallet<T> {
                 }
 
                 Self::change_pos_gpu_by_rent(machine_id, true);
-            },
+            }
             // 租用结束 或 租用失败(半小时无确认)
             MachineStatus::Online => {
                 if rent_duration.is_some() {
@@ -1965,8 +2038,8 @@ impl<T: Config> RTOps for Pallet<T> {
 
                     Self::change_pos_gpu_by_rent(machine_id, false);
                 }
-            },
-            _ => {},
+            }
+            _ => {}
         }
 
         // 改变租用时长或者租用次数
@@ -2059,7 +2132,7 @@ impl<T: Config> MTOps for Pallet<T> {
 impl<T: Config> Module<T> {
     pub fn get_total_staker_num() -> u64 {
         let all_stash = Self::get_all_stash();
-        return all_stash.len() as u64
+        return all_stash.len() as u64;
     }
 
     pub fn get_op_info() -> RpcSysInfo<BalanceOf<T>> {

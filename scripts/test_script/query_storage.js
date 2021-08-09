@@ -46,8 +46,14 @@ async function main() {
   funcMap["onlineProfile"]["sysInfo"] = api.query.onlineProfile.sysInfo;
   funcMap["onlineProfile"]["machinesInfo"] =
     api.query.onlineProfile.machinesInfo;
+
   funcMap["onlineProfile"]["erasMachinePoints"] =
     api.query.onlineProfile.erasMachinePoints;
+  funcMap["onlineProfile"]["erasStashPoints"] =
+    api.query.onlineProfile.erasStashPoints;
+
+  funcMap["onlineProfile"]["liveMachines"] =
+    api.query.onlineProfile.liveMachines;
 
   let heightHash = await api.rpc.chain.getBlockHash(args["at-height"]);
 
@@ -59,7 +65,8 @@ async function main() {
 
 async function do_query(callFunc, heightHash, ...args) {
   const a = await callFunc(heightHash, ...args);
-  console.log(a.toJSON());
+  // console.log(a.toJSON());
+  console.log(a.toHex());
   // console.log(`${a.machine_info_detail.staker_customize_info}`);
   process.exit(0);
 }

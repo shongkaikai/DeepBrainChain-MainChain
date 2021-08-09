@@ -8,6 +8,10 @@ async function main() {
   // 读取参数
   const args = minimist(process.argv.slice(2));
 
+  if (args.hasOwnProperty("strinfo")) {
+    args._.push(args["strinfo"]);
+  }
+
   // 构建连接
   const wsProvider = new WsProvider(args["port"]);
   const type_path = fs.readFileSync(args["type-file"]);
@@ -31,7 +35,8 @@ async function main() {
   funcMap["dbcPriceOcw"]["addPriceUrl"] = api.tx.dbcPriceOcw.addPriceUrl;
 
   funcMap["committee"] = {};
-  funcMap["committee"]["setStakedUsdPerOrder"] = api.tx.committee.setStakedUsdPerOrder;
+  funcMap["committee"]["setStakedUsdPerOrder"] =
+    api.tx.committee.setStakedUsdPerOrder;
   funcMap["committee"]["addCommittee"] = api.tx.committee.addCommittee;
 
   funcMap["leaseCommittee"] = {};
@@ -40,10 +45,17 @@ async function main() {
 
   funcMap["onlineProfile"] = {};
   funcMap["onlineProfile"]["setGpuStake"] = api.tx.onlineProfile.setGpuStake;
-  funcMap["onlineProfile"]["setRewardStartEra"] = api.tx.onlineProfile.setRewardStartEra;
-  funcMap["onlineProfile"]["setPhaseNRewardPerEra"] = api.tx.onlineProfile.setPhaseNRewardPerEra;
-  funcMap["onlineProfile"]["setStakeUsdLimit"] = api.tx.onlineProfile.setStakeUsdLimit;
-  funcMap["onlineProfile"]["setStandardGpuPointPrice"] = api.tx.onlineProfile.setStandardGpuPointPrice;
+  funcMap["onlineProfile"]["setRewardStartEra"] =
+    api.tx.onlineProfile.setRewardStartEra;
+  funcMap["onlineProfile"]["setPhaseNRewardPerEra"] =
+    api.tx.onlineProfile.setPhaseNRewardPerEra;
+  funcMap["onlineProfile"]["setStakeUsdLimit"] =
+    api.tx.onlineProfile.setStakeUsdLimit;
+  funcMap["onlineProfile"]["setStandardGpuPointPrice"] =
+    api.tx.onlineProfile.setStandardGpuPointPrice;
+
+  funcMap["onlineProfile"]["rootAddLiveMachine"] =
+    api.tx.onlineProfile.rootAddLiveMachine;
 
   funcMap["rentMachine"] = {};
   funcMap["rentMachine"]["setRentPot"] = api.tx.rentMachine.setRentPot;
