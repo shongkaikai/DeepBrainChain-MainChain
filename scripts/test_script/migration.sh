@@ -8,7 +8,1521 @@ ws="ws://127.0.0.1:9944"
 tf="../../dbc_types.json"
 rpc="../../dbc_rpc.json"
 
-# basic params setting:
+# 基本参数设置：
+
+## 增加三个委员会：
+{
+  normal: [
+    5H3JK8j4V2n9huesXZ9Z5AFwVzf4W9tBMdTJ76ZAZGp9QGZi,
+    5HL92dTnQrZSJZy7ckDVYVt9mMX3NsjShWsYDquB3eB3yb5R,
+    5HgxJ4DTiPoSLkoy9svq8zbfdEm7chnMNrXgosiZSR9Y82Kj
+  ],
+  chill_list: [],
+  waiting_box_pubkey: []
+}
+
+## 设置committee_reward:
+5HgxJ4DTiPoSLkoy9svq8zbfdEm7chnMNrXgosiZSR9Y82Kj  14.6857 kDBC
+5H3JK8j4V2n9huesXZ9Z5AFwVzf4W9tBMdTJ76ZAZGp9QGZi  14.6857 kDBC
+5HL92dTnQrZSJZy7ckDVYVt9mMX3NsjShWsYDquB3eB3yb5R  14.6857 kDBC
+
+committeeStakeDBCPerOrder
+2.5188 kDBC
+committeeStakeUSDPerOrder
+15,000,000
+UserTotalStake
+5DLtYEegtnfZbwxs5o497Nz71eesuu6KZmYxmULViQHteo8h  200.0000 kDBC
+5HgxJ4DTiPoSLkoy9svq8zbfdEm7chnMNrXgosiZSR9Y82Kj   156.1712 kDBC
+5HjW7xKJJgq7XuHeum1pS6GgpNfPGaUgYi42tfzH8Vvihuqd  13.2000 MDBC
+5CX9s2iVqsoC2hvECqhAcdu3teAjyBtQWf8Tr8iYmLw1ZtKF  400.0000 kDBC
+5HVvS2qUH4r5eEMxM6fftZ1WaEbYTHnVvfKzk5vpeLge93L8  4.0000 MDBC
+5DJ4hUyPsZG45fh29TdSR52rDMXrcYWef2gZpZtJ1JhYB9Xg  400.0000 kDBC
+5F1GjfSQeUoxRCYBnQfPtyaboPgKm3zbghttHnYUHx6M8oT1  3.3000 MDBC
+5H3JK8j4V2n9huesXZ9Z5AFwVzf4W9tBMdTJ76ZAZGp9QGZi  156.1712 kDBC
+5CnzLAkA7xxmkKX7SehL4T6Y4csF4qLz4KyQSKt7xi38fMpL  400.0000 kDBC
+5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez  100.0000 kDBC
+5ELdw126F3vx4YcjKGwUWZXsyXe9q94brjG3AvodSerJ9xar  100.0000 kDBC
+5FWSTNTaYh6FgVJn7Tx9rUJFFBG2P6aqUhVCASkpGkydFn3G  6.7000 MDBC
+5GmjJ3TuTHgdHoxQVDeWqrX7qK7FTj24maJWHv8Tk4Lyke2b  100.0000 kDBC
+5F9ULw6Xb4miDHmgaNL17mZ8LZE27JrdHZUzYtz2vTtMmVBc  400.0000 kDBC
+5Ftw7cfxqRYbyjYTuKnWnoxvJxzkNJtgzAoxzNdjyAq2vPde  1.2000 MDBC
+5GLGpzre7RaHuxMUHBKxN47hFGxc1dcTtJAt2uMten7RhKDq  400.0000 kDBC
+5EM7dxaRNkihu1vMi3xHZTDmuMgihxz2ZFaRYvyB3T5h7B8K  800.0000 kDBC
+5E7123qZExgZaYKnmTcJacu68c2GbLeSHo9qNWmUWcaw4RSR  9.2000 MDBC
+5E2HdrsWn8R4apcB5r23ZzZzFkVMwz5b7SUxPsmbXf3zA9tY  100.0000 kDBC
+5HJugpuDxQGKLJwmv6K5eWFepDPkhPbwyTDR5vKjCv1MwUcS  1.0000 MDBC
+5CoEB32UJESDaEQnGcsL26dA3ww4HJhbyNTpvBTFpVQz2y98  300.0000 kDBC
+5HL92dTnQrZSJZy7ckDVYVt9mMX3NsjShWsYDquB3eB3yb5R  178.8413 kDBC
+5CaeqE5x1FAZbkLJ3Di4kjMXjpqjk5oUbC8Z8AKdvxBjCnWk  2.8000 MDBC
+5DHaxEtsU59CD5KqyvVEXL2Zu3LPjAM6HkrZYh4iQ4CsC1Fa  400.0000 kDBC
+
+
+## RentMachine:
+### PendingConfirmation
+1089248eb78fc09a5fd58af615b791465eb913d8ab3131080c4da5e7a1980349
+5G6Bb5Lo9em2wxm2NcSGiV4APxp5Fr9LtvMSLEspRVSq1yUF
+### RentFeePot
+rentMachine.rentFeePot: Option<AccountId>
+5ESFPETkR7WUmjz6ViCzvCVf6kWYzgdC4hmBoHzBskNsESpg
+
+### UserRented
+[
+  [
+    [
+      5G6Bb5Lo9em2wxm2NcSGiV4APxp5Fr9LtvMSLEspRVSq1yUF
+    ],
+    [
+      1089248eb78fc09a5fd58af615b791465eb913d8ab3131080c4da5e7a1980349
+    ]
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez
+    ],
+    [
+      009434ed01e41f3708c68472a90b672b9523c6cae399061f4fb7d85f864c587b,
+      00ccb39e2f4accc7ad481cb3fd29338446c166c67e2b925fc579684ab393974b,
+      029cac37fb61744a0ace988ba37c4094f0803f54d0ef125866a8926932ce9e64,
+      045715b276e6bf5d56d88d0f4f8165a3461f43d1a0530851f823282671926f1b,
+      0834f2d0c889a0e9efee9a15297e35114aef0cc02ad985f60ac2bc8b9b2dd028,
+      084d4010bbb39711f06d9c56e287d5cd2dec4db02238d14fcbc6a8fee3a1e322,
+      0a0855fafc62a8985cd2689e18ef885b2d94db9bf5f96d1bc082cb67d010e57a,
+      0edac3b0263dd09538717bb0f5bf3f1bced70d7e017239d6f307b0801220c022,
+      121bccd2e17d1936e6db908b1bad0b8f80facc907b8b2ddd80a666792ad6eb18,
+      185087b80125e7bc639790625aa0fa8b753e0d2208096d0f000ec8cf5d1c080d,
+      1c22dcf5b3adb89d0a84339eb500088c12e3e04408dabf78878e70d7333f814b,
+      2065b92ff1b00e8e1db2ba7639270dcc3a457dcaafd23068777fa807bcd96e5b,
+      2641bc74c63156aa6880a66ad77fe9fdd0da214b7f0fade6fa9138b52e1d065c,
+      287d71ba75faa62b27ca950101cc9188d30619e4769be24ab1c3f57e0db28072,
+      2a94ff300d110c0b5d546abaa5097b98ff7edf64c6c917827e7f3c8dd7860b34,
+      2e1ba8cd854696c35c0072778609953bfa3caf7d7c4489565e6799599b046320,
+      2e2ed556b9497f85e611f4b91a95206669daa59f7c9d921b4890d1b5b435714e,
+      2e40bd2747807ec2d11c5e12b742c582ea65853774a8c0b635319326eea17925,
+      307de99abb12545a87353b6186e23db7f00e372b4aec90e47d7075f353c3780f,
+      30bb0332dc33a83e77e987b0497ef70802e1b91da3c2696de7e6c1633ff4436e,
+      30de920cb8ca2196050e9bd8c872d1d4c78b2e1ddcfbf899ba949ed6bf1cca06,
+      32870be66a8037163bcd0b2718a439fc2c325231507845eceea5a800a0dc905a,
+      343dc1f03a284537537dfba98d2010f2ba91eb8780397853505925be7d738178,
+      38018f86daac63793f1a0986f896904f01af2ed25641c4504b1a7a57596c0039,
+      3a57aebd6e9a1b46d6ed720cbb6ed3400b3c5c53f99d3aee24b4351dcccfbb1c,
+      40b27a952d020770183a085d2899e247a3499b4c6b9701c737e365883558277d,
+      48ee604dffb851357a77717bf28031ef8287e476b6ef5c75c751d556c24a2a26,
+      4ec8d585e7ce85a95436cbc619c13763a689bd70125546a31ebf1b76d52ec23e,
+      4ed200e188a53ce8289df0f753cdd3605d07e07471fe21b57575f5af57e80e33,
+      502c06506cf6754e771c6ae97fd58a6fe4e2aa7fe5df929985c93aec016ab914,
+      523d649b3e1e78c05ed28884f44e7a025025273cbe92e04a4cf30e2a94250b1c,
+      526773a359e1e2d8a3ba16a1a221235701607ab4a8c9a24c8b3e900d6ddb013d,
+      54a2deda715955a180907733488172310e15f5ab083d6593599d1d41f6729a73,
+      562cb6a425ca39428f904f926d46aa07ff35dd1a2b3222642f6285b71fae4b3a,
+      566414b4c9bf361c13f51f9c90052f133dada831fbb9403f5d6495fd1eb16444,
+      568040ecae821e3c36fc133c8090d4b42b0ea9cba3e5dcf905140a97f3620d67,
+      56c79692624a2d9d95cab49c2dfd1bacadf8c86bc4eb9a7d64750da93122fe2f,
+      56f8a3bef5a8d2085e97f10fd89da4df9b7307dbc5bba671815365ecb4d85712,
+      56fef8167f326d777fc30a814c85f350375db3bb953dcf4446347078c0443046,
+      5cbdd852f01ffcbe91c1c5179fec244dbb9856afb15df1a3072e2ab9959e1760,
+      64600924f6442ff9e6ce48c2b5cd12a0f90739a8b4f3dba6d64b76021224bf29,
+      64bad6cd7d87a7465dcb13cf1a13cd5dcd663a319d0093f3f5ebb7d3d781e05e,
+      688deb612f337bfe548c08f9efeab022264f5d92477af35bc6b2f0b917d22642,
+      689cd7455defbe3986880aef561814c94b5b90a18bc045c8029c96072d50ab02,
+      6cb462f2855086ac47583459b94f7bf9414f997ec2aa418b7c705eba53ce9a13,
+      70427b764fbe58049e4396064f668515ec86f9ed533ccfc469277948ffe2fe51,
+      76613a135b63bfc1df756334fc0e5a5ce21b8a6fc555f85b20c2c155bdfcc118,
+      766d1d4e904b5fda8a3ee13e85bd11fc821c2ecd5305f4edc4a8ff829b71a444,
+      821f374bcc7dba31255beec018467a9cbd39982a269cd614a7c1b23bc2d44855,
+      82dc88721817403c600509dd3b639686b071615e60e12e39b3e7559a9621e96d,
+      8c438c4713b847fbebadb48a8696b8495f6ce4a76b546ebf2e9b2d7cefcb3928,
+      8cb7044e6557130a1ac39658b463eed937b02d43ae982288a80bfcb331cbc20d,
+      92a1f6080aa55549742925e13ad5d14328bc3b5354cb95118b126bdb0616c859,
+      942bd171889df3c9b0e45425f8c82b8feeb075fe017bb98e53115a88ad6d6b7d,
+      967f5b77f7868ac25eb98324bbc4cc295de189463dbc1721fe3eb06ec1a02673,
+      9eca869d5774c8421d099a4ae3e358b976fab5e25f0bbb1df8e0698c8287422d,
+      a0ae2db8629438d7a6f6e19416ff32237675f06bc78929326ee2b989524bb51d,
+      a0f3a3edfded4ea014f0a3e994c914c8bd3ecccc7459bd9d5456454cb665517e,
+      a26cf5a9252515dd6be4e5342d06227e1721f52c98ec5e0618aaaae3a4f9a320,
+      aafab664bcf7c998daa16be8122df3fbca5c533ee1f9521e955bb0a28470e808,
+      ae25be1352c06b71bcd40ce92d9ebf5e29f55f23602f61e0d19449c3700e2675,
+      ae950886272f29cb97c80cbac5a76fd7e53d47fd6ef0027715b5db959b5d625e,
+      b02fd64ffd683b6e81960722792f3d0d8029fd2f4c552169c67b1158461a8d4e,
+      b2ba695cf242a41ee88b9007982e98f56a8c04bbd0b95eab44efe23f964d1438,
+      b6a796bb0e1a09938d15b7134508c293c0ba7d7aa29edbb2b9bdc4890aff0b4c,
+      b8c0a70999933471402335641fe3c809417e459465abc0c0d62aafb8e8f35476,
+      ba15217da1bf5b776bc704cac60be6b26d54fda959ec763ebad2a4365a8fa50d,
+      be3da854355020f4f185bbab996bf1c6d08adca261af15cbccdcf168dbf6c334,
+      be9596d95bfb75a4ee139d6a8a664af81040f6a09e05678453bd5f244f9a8617,
+      bedaa50e1bf07f75b7896818091f041df29541d462ec9f093adef68b1f482627,
+      c2f29aea9485a3a5baca5a2bc9af9e5ce6f2684474f1bcfdb7e35b127a7a7d06,
+      c42e0da072c9abff1ab400678a5abd47fbd7e05c966e3154661d833528437572,
+      c6608e8ad75f6f4f005be2c59a77fbd9423620b8d3c47b5321367b019de2a324,
+      c884d073a4418a71b43f8ff4c24cbb0bf62b4779badc4be7ea0effe0d9fe9536,
+      cc05925b0b8573897c0347028c89abf32710641f927a3385eef26a345a389932,
+      d295f80022e529ceb312270038e09eb63e4c58f71539dfa8a65fe4fbd2212b43,
+      d4302696b38c9482c30ff3adb047ec19e5ec1f8e8c3d9faaef9ffaa0b7c0ed43,
+      d48cb1f93ac6b9912608c77dc31c9be59b925a30c816bd86b943f48c98c65d55,
+      d4dcefbec55cf684ea5f99dd7dc5e26372e209ec8eddee3dc842d6861364cf1b,
+      d8ca248c807735eddcf1ef38f9e68e5cafb0a0e9e05cc054c5b8ddd981207c2d,
+      dc61efbecf8b44c40607ea01292007569806076cb0997ecce05b8ac157e55d57,
+      de1ed0b7b638401a269e620b6be5719cef225968b3bb788bbc643781f763c023,
+      e037626d3c71f15738ec64dd9512170ae1639c7c11d42b426e1ac42667799632,
+      e0a0a9b598f4a38c090de0346db0bce1e10d10ad3786293c7fc873dad7ccd401,
+      e40843fb39389dbce93cc388cda7d4385aee27e15646ec89c98ab4664cc9d10e,
+      e6a2afe3a00838c7f26e735fdd5fa7e6e9ecb4152dca7ab63fafd082bfaaa262,
+      e6af62765937355271659ae09a2dc771a1f76e73391df6665ff46574b59a3654,
+      e88b9f99b0fd9f3e391071284becf5de0e518f5794848f4c0bb085bba745c55b,
+      eac42c4ccb0e06e7fda56b368e6e744bc84742df4a513dc7508379a20ae9cc62,
+      ec35d1714906d92db94952f64d812af7b837e0c3100f4ef1343e575174d26d4a,
+      ee0d003006f8ddbccb97dff96bcb4bee1b8c1aeaf7c64e0ca9d0f31752d17875,
+      f04b405e336a9a2aa7d2bf8c2f73e838b10d5021db0888642093fe90bbe31659,
+      f8c2f05bdd72831475b0663ee87ea7be4fc620c2dc71ae997ffd7a1594a43303,
+      fcd0adf3d32ef36d2ff89a9c33e54f233734f08bf567b7a5a53a3db85d2e512a
+    ]
+  ],
+  [
+    [
+      5GQkqvKJhoEsB6W94qsdwPbKcfsmzZsXn2kN2sk8ahjB1THH
+    ],
+    []
+  ],
+  [
+    [
+      5DaCxF3G194QnW8SbN7cNUr7qF4M3Gk8yec93F1z1ziSiK2A
+    ],
+    [
+      166aead3997957ce0e76b9e5fa5b12e2b7bd04a964f267171a2d458300ae7021,
+      22d580cb162c8ed7bb4aecb4800efd86f125ac98a64b5309612e4dd9a308307f
+    ]
+  ]
+]
+
+### RentOrder: 上面四个账户，分别对应：
+[
+  [
+    [
+      5G6Bb5Lo9em2wxm2NcSGiV4APxp5Fr9LtvMSLEspRVSq1yUF,
+      1089248eb78fc09a5fd58af615b791465eb913d8ab3131080c4da5e7a1980349
+    ],
+    {
+      renter: 5G6Bb5Lo9em2wxm2NcSGiV4APxp5Fr9LtvMSLEspRVSq1yUF,
+      rent_start: 48,560,
+      confirm_rent: 0,
+      rent_end: 163,760,
+      stake_amount: 115.7555 kDBC
+    }
+  ]
+]
+
+[
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      e6af62765937355271659ae09a2dc771a1f76e73391df6665ff46574b59a3654
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,811,
+      confirm_rent: 39,814,
+      rent_end: 126,211,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      9eca869d5774c8421d099a4ae3e358b976fab5e25f0bbb1df8e0698c8287422d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,133,
+      confirm_rent: 2,143,
+      rent_end: 88,533,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      eac42c4ccb0e06e7fda56b368e6e744bc84742df4a513dc7508379a20ae9cc62
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,801,
+      confirm_rent: 39,818,
+      rent_end: 126,201,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      cc05925b0b8573897c0347028c89abf32710641f927a3385eef26a345a389932
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,135,
+      confirm_rent: 2,144,
+      rent_end: 88,535,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      0834f2d0c889a0e9efee9a15297e35114aef0cc02ad985f60ac2bc8b9b2dd028
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,123,
+      confirm_rent: 2,124,
+      rent_end: 88,523,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      566414b4c9bf361c13f51f9c90052f133dada831fbb9403f5d6495fd1eb16444
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,129,
+      confirm_rent: 2,139,
+      rent_end: 88,529,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      084d4010bbb39711f06d9c56e287d5cd2dec4db02238d14fcbc6a8fee3a1e322
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 40,333,
+      confirm_rent: 40,335,
+      rent_end: 126,733,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      8c438c4713b847fbebadb48a8696b8495f6ce4a76b546ebf2e9b2d7cefcb3928
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,132,
+      confirm_rent: 2,142,
+      rent_end: 88,532,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      82dc88721817403c600509dd3b639686b071615e60e12e39b3e7559a9621e96d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,490,
+      confirm_rent: 14,493,
+      rent_end: 72,090,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      0a0855fafc62a8985cd2689e18ef885b2d94db9bf5f96d1bc082cb67d010e57a
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,487,
+      confirm_rent: 14,491,
+      rent_end: 72,087,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      343dc1f03a284537537dfba98d2010f2ba91eb8780397853505925be7d738178
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,798,
+      confirm_rent: 39,821,
+      rent_end: 126,198,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      307de99abb12545a87353b6186e23db7f00e372b4aec90e47d7075f353c3780f
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,809,
+      confirm_rent: 39,817,
+      rent_end: 126,209,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      121bccd2e17d1936e6db908b1bad0b8f80facc907b8b2ddd80a666792ad6eb18
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 33,783,
+      confirm_rent: 33,784,
+      rent_end: 120,183,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      0edac3b0263dd09538717bb0f5bf3f1bced70d7e017239d6f307b0801220c022
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 8,782,
+      confirm_rent: 8,783,
+      rent_end: 95,182,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      e6a2afe3a00838c7f26e735fdd5fa7e6e9ecb4152dca7ab63fafd082bfaaa262
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,136,
+      confirm_rent: 2,145,
+      rent_end: 88,536,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      be3da854355020f4f185bbab996bf1c6d08adca261af15cbccdcf168dbf6c334
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 33,785,
+      confirm_rent: 33,786,
+      rent_end: 120,185,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      d295f80022e529ceb312270038e09eb63e4c58f71539dfa8a65fe4fbd2212b43
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,488,
+      confirm_rent: 14,492,
+      rent_end: 72,088,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      64600924f6442ff9e6ce48c2b5cd12a0f90739a8b4f3dba6d64b76021224bf29
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,809,
+      confirm_rent: 39,816,
+      rent_end: 126,209,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      568040ecae821e3c36fc133c8090d4b42b0ea9cba3e5dcf905140a97f3620d67
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,130,
+      confirm_rent: 2,140,
+      rent_end: 88,530,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      d4dcefbec55cf684ea5f99dd7dc5e26372e209ec8eddee3dc842d6861364cf1b
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,490,
+      confirm_rent: 14,494,
+      rent_end: 72,090,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      be9596d95bfb75a4ee139d6a8a664af81040f6a09e05678453bd5f244f9a8617
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,134,
+      confirm_rent: 2,144,
+      rent_end: 88,534,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      3a57aebd6e9a1b46d6ed720cbb6ed3400b3c5c53f99d3aee24b4351dcccfbb1c
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,128,
+      confirm_rent: 2,138,
+      rent_end: 88,528,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      32870be66a8037163bcd0b2718a439fc2c325231507845eceea5a800a0dc905a
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 36,923,
+      confirm_rent: 36,924,
+      rent_end: 123,323,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      688deb612f337bfe548c08f9efeab022264f5d92477af35bc6b2f0b917d22642
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,131,
+      confirm_rent: 2,141,
+      rent_end: 88,531,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      8cb7044e6557130a1ac39658b463eed937b02d43ae982288a80bfcb331cbc20d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,132,
+      confirm_rent: 2,142,
+      rent_end: 88,532,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      c884d073a4418a71b43f8ff4c24cbb0bf62b4779badc4be7ea0effe0d9fe9536
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,135,
+      confirm_rent: 2,144,
+      rent_end: 88,535,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      54a2deda715955a180907733488172310e15f5ab083d6593599d1d41f6729a73
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 40,797,
+      confirm_rent: 40,824,
+      rent_end: 69,597,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      287d71ba75faa62b27ca950101cc9188d30619e4769be24ab1c3f57e0db28072
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,128,
+      confirm_rent: 2,138,
+      rent_end: 88,528,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      ee0d003006f8ddbccb97dff96bcb4bee1b8c1aeaf7c64e0ca9d0f31752d17875
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,136,
+      confirm_rent: 2,146,
+      rent_end: 88,536,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      30de920cb8ca2196050e9bd8c872d1d4c78b2e1ddcfbf899ba949ed6bf1cca06
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,128,
+      confirm_rent: 2,138,
+      rent_end: 88,528,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      92a1f6080aa55549742925e13ad5d14328bc3b5354cb95118b126bdb0616c859
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 37,477,
+      confirm_rent: 37,478,
+      rent_end: 123,877,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      b02fd64ffd683b6e81960722792f3d0d8029fd2f4c552169c67b1158461a8d4e
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,489,
+      confirm_rent: 14,493,
+      rent_end: 72,089,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      a0f3a3edfded4ea014f0a3e994c914c8bd3ecccc7459bd9d5456454cb665517e
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,489,
+      confirm_rent: 14,492,
+      rent_end: 72,089,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      6cb462f2855086ac47583459b94f7bf9414f997ec2aa418b7c705eba53ce9a13
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,799,
+      confirm_rent: 39,820,
+      rent_end: 126,199,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      56fef8167f326d777fc30a814c85f350375db3bb953dcf4446347078c0443046
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,130,
+      confirm_rent: 2,140,
+      rent_end: 88,530,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      bedaa50e1bf07f75b7896818091f041df29541d462ec9f093adef68b1f482627
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 40,143,
+      confirm_rent: 40,144,
+      rent_end: 126,543,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      821f374bcc7dba31255beec018467a9cbd39982a269cd614a7c1b23bc2d44855
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,132,
+      confirm_rent: 2,142,
+      rent_end: 88,532,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      64bad6cd7d87a7465dcb13cf1a13cd5dcd663a319d0093f3f5ebb7d3d781e05e
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 34,613,
+      confirm_rent: 34,634,
+      rent_end: 121,013,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      e037626d3c71f15738ec64dd9512170ae1639c7c11d42b426e1ac42667799632
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,135,
+      confirm_rent: 2,145,
+      rent_end: 88,535,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      766d1d4e904b5fda8a3ee13e85bd11fc821c2ecd5305f4edc4a8ff829b71a444
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,131,
+      confirm_rent: 2,141,
+      rent_end: 88,531,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      e88b9f99b0fd9f3e391071284becf5de0e518f5794848f4c0bb085bba745c55b
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,136,
+      confirm_rent: 2,146,
+      rent_end: 88,536,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      009434ed01e41f3708c68472a90b672b9523c6cae399061f4fb7d85f864c587b
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,807,
+      confirm_rent: 39,818,
+      rent_end: 126,207,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      00ccb39e2f4accc7ad481cb3fd29338446c166c67e2b925fc579684ab393974b
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,808,
+      confirm_rent: 39,817,
+      rent_end: 126,208,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      185087b80125e7bc639790625aa0fa8b753e0d2208096d0f000ec8cf5d1c080d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,489,
+      confirm_rent: 14,493,
+      rent_end: 72,089,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      2065b92ff1b00e8e1db2ba7639270dcc3a457dcaafd23068777fa807bcd96e5b
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,808,
+      confirm_rent: 39,817,
+      rent_end: 126,208,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      70427b764fbe58049e4396064f668515ec86f9ed533ccfc469277948ffe2fe51
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,131,
+      confirm_rent: 2,141,
+      rent_end: 88,531,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      ec35d1714906d92db94952f64d812af7b837e0c3100f4ef1343e575174d26d4a
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,136,
+      confirm_rent: 2,146,
+      rent_end: 88,536,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      ba15217da1bf5b776bc704cac60be6b26d54fda959ec763ebad2a4365a8fa50d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,134,
+      confirm_rent: 2,144,
+      rent_end: 88,534,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      2e40bd2747807ec2d11c5e12b742c582ea65853774a8c0b635319326eea17925
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 34,594,
+      confirm_rent: 34,595,
+      rent_end: 120,994,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      029cac37fb61744a0ace988ba37c4094f0803f54d0ef125866a8926932ce9e64
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,792,
+      confirm_rent: 39,795,
+      rent_end: 126,192,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      dc61efbecf8b44c40607ea01292007569806076cb0997ecce05b8ac157e55d57
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,135,
+      confirm_rent: 2,145,
+      rent_end: 88,535,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      4ec8d585e7ce85a95436cbc619c13763a689bd70125546a31ebf1b76d52ec23e
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 37,363,
+      confirm_rent: 37,364,
+      rent_end: 123,763,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      e40843fb39389dbce93cc388cda7d4385aee27e15646ec89c98ab4664cc9d10e
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,810,
+      confirm_rent: 39,815,
+      rent_end: 126,210,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      942bd171889df3c9b0e45425f8c82b8feeb075fe017bb98e53115a88ad6d6b7d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,132,
+      confirm_rent: 2,142,
+      rent_end: 88,532,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      aafab664bcf7c998daa16be8122df3fbca5c533ee1f9521e955bb0a28470e808
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 36,495,
+      confirm_rent: 36,496,
+      rent_end: 122,895,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      523d649b3e1e78c05ed28884f44e7a025025273cbe92e04a4cf30e2a94250b1c
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,129,
+      confirm_rent: 2,139,
+      rent_end: 88,529,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      c2f29aea9485a3a5baca5a2bc9af9e5ce6f2684474f1bcfdb7e35b127a7a7d06
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,799,
+      confirm_rent: 39,819,
+      rent_end: 126,199,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      30bb0332dc33a83e77e987b0497ef70802e1b91da3c2696de7e6c1633ff4436e
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 37,302,
+      confirm_rent: 37,333,
+      rent_end: 123,702,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      502c06506cf6754e771c6ae97fd58a6fe4e2aa7fe5df929985c93aec016ab914
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 8,775,
+      confirm_rent: 8,779,
+      rent_end: 95,175,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      526773a359e1e2d8a3ba16a1a221235701607ab4a8c9a24c8b3e900d6ddb013d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,129,
+      confirm_rent: 2,139,
+      rent_end: 88,529,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      2641bc74c63156aa6880a66ad77fe9fdd0da214b7f0fade6fa9138b52e1d065c
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,127,
+      confirm_rent: 2,138,
+      rent_end: 88,527,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      045715b276e6bf5d56d88d0f4f8165a3461f43d1a0530851f823282671926f1b
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,488,
+      confirm_rent: 14,492,
+      rent_end: 72,088,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      c6608e8ad75f6f4f005be2c59a77fbd9423620b8d3c47b5321367b019de2a324
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 8,792,
+      confirm_rent: 8,793,
+      rent_end: 95,192,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      f04b405e336a9a2aa7d2bf8c2f73e838b10d5021db0888642093fe90bbe31659
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 37,280,
+      confirm_rent: 37,288,
+      rent_end: 123,680,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      b2ba695cf242a41ee88b9007982e98f56a8c04bbd0b95eab44efe23f964d1438
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,133,
+      confirm_rent: 2,143,
+      rent_end: 88,533,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      d48cb1f93ac6b9912608c77dc31c9be59b925a30c816bd86b943f48c98c65d55
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 37,521,
+      confirm_rent: 37,528,
+      rent_end: 123,921,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      c42e0da072c9abff1ab400678a5abd47fbd7e05c966e3154661d833528437572
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 33,784,
+      confirm_rent: 33,785,
+      rent_end: 120,184,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      689cd7455defbe3986880aef561814c94b5b90a18bc045c8029c96072d50ab02
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,131,
+      confirm_rent: 2,141,
+      rent_end: 88,531,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      1c22dcf5b3adb89d0a84339eb500088c12e3e04408dabf78878e70d7333f814b
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,487,
+      confirm_rent: 14,491,
+      rent_end: 72,087,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      2a94ff300d110c0b5d546abaa5097b98ff7edf64c6c917827e7f3c8dd7860b34
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 34,594,
+      confirm_rent: 34,595,
+      rent_end: 120,994,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      ae25be1352c06b71bcd40ce92d9ebf5e29f55f23602f61e0d19449c3700e2675
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,133,
+      confirm_rent: 2,143,
+      rent_end: 88,533,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      76613a135b63bfc1df756334fc0e5a5ce21b8a6fc555f85b20c2c155bdfcc118
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,799,
+      confirm_rent: 39,820,
+      rent_end: 126,199,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      56f8a3bef5a8d2085e97f10fd89da4df9b7307dbc5bba671815365ecb4d85712
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,130,
+      confirm_rent: 2,140,
+      rent_end: 88,530,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      b6a796bb0e1a09938d15b7134508c293c0ba7d7aa29edbb2b9bdc4890aff0b4c
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,134,
+      confirm_rent: 2,143,
+      rent_end: 88,534,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      4ed200e188a53ce8289df0f753cdd3605d07e07471fe21b57575f5af57e80e33
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 37,180,
+      confirm_rent: 37,181,
+      rent_end: 123,580,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      5cbdd852f01ffcbe91c1c5179fec244dbb9856afb15df1a3072e2ab9959e1760
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,131,
+      confirm_rent: 2,140,
+      rent_end: 88,531,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      e0a0a9b598f4a38c090de0346db0bce1e10d10ad3786293c7fc873dad7ccd401
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,136,
+      confirm_rent: 2,145,
+      rent_end: 88,536,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      48ee604dffb851357a77717bf28031ef8287e476b6ef5c75c751d556c24a2a26
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,809,
+      confirm_rent: 39,816,
+      rent_end: 126,209,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      d4302696b38c9482c30ff3adb047ec19e5ec1f8e8c3d9faaef9ffaa0b7c0ed43
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,800,
+      confirm_rent: 39,819,
+      rent_end: 126,200,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      967f5b77f7868ac25eb98324bbc4cc295de189463dbc1721fe3eb06ec1a02673
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,133,
+      confirm_rent: 2,142,
+      rent_end: 88,533,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      2e1ba8cd854696c35c0072778609953bfa3caf7d7c4489565e6799599b046320
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,128,
+      confirm_rent: 2,138,
+      rent_end: 88,528,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      562cb6a425ca39428f904f926d46aa07ff35dd1a2b3222642f6285b71fae4b3a
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,798,
+      confirm_rent: 39,821,
+      rent_end: 126,198,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      ae950886272f29cb97c80cbac5a76fd7e53d47fd6ef0027715b5db959b5d625e
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,133,
+      confirm_rent: 2,143,
+      rent_end: 88,533,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      f8c2f05bdd72831475b0663ee87ea7be4fc620c2dc71ae997ffd7a1594a43303
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,137,
+      confirm_rent: 2,146,
+      rent_end: 88,537,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      b8c0a70999933471402335641fe3c809417e459465abc0c0d62aafb8e8f35476
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 37,522,
+      confirm_rent: 37,541,
+      rent_end: 123,922,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      de1ed0b7b638401a269e620b6be5719cef225968b3bb788bbc643781f763c023
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,801,
+      confirm_rent: 39,818,
+      rent_end: 126,201,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      a26cf5a9252515dd6be4e5342d06227e1721f52c98ec5e0618aaaae3a4f9a320
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,810,
+      confirm_rent: 39,815,
+      rent_end: 126,210,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      40b27a952d020770183a085d2899e247a3499b4c6b9701c737e365883558277d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,129,
+      confirm_rent: 2,139,
+      rent_end: 88,529,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      2e2ed556b9497f85e611f4b91a95206669daa59f7c9d921b4890d1b5b435714e
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,793,
+      confirm_rent: 39,795,
+      rent_end: 126,193,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      a0ae2db8629438d7a6f6e19416ff32237675f06bc78929326ee2b989524bb51d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 34,593,
+      confirm_rent: 34,595,
+      rent_end: 120,993,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      38018f86daac63793f1a0986f896904f01af2ed25641c4504b1a7a57596c0039
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 14,487,
+      confirm_rent: 14,491,
+      rent_end: 72,087,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      d8ca248c807735eddcf1ef38f9e68e5cafb0a0e9e05cc054c5b8ddd981207c2d
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,135,
+      confirm_rent: 2,145,
+      rent_end: 88,535,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      fcd0adf3d32ef36d2ff89a9c33e54f233734f08bf567b7a5a53a3db85d2e512a
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 39,811,
+      confirm_rent: 39,814,
+      rent_end: 126,211,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      56c79692624a2d9d95cab49c2dfd1bacadf8c86bc4eb9a7d64750da93122fe2f
+    ],
+    {
+      renter: 5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez,
+      rent_start: 2,130,
+      confirm_rent: 2,140,
+      rent_end: 88,530,
+      stake_amount: 0
+    }
+  ]
+]
+
+[]
+
+[
+  [
+    [
+      5DaCxF3G194QnW8SbN7cNUr7qF4M3Gk8yec93F1z1ziSiK2A,
+      166aead3997957ce0e76b9e5fa5b12e2b7bd04a964f267171a2d458300ae7021
+    ],
+    {
+      renter: 5DaCxF3G194QnW8SbN7cNUr7qF4M3Gk8yec93F1z1ziSiK2A,
+      rent_start: 45,318,
+      confirm_rent: 45,321,
+      rent_end: 51,079,
+      stake_amount: 0
+    }
+  ],
+  [
+    [
+      5DaCxF3G194QnW8SbN7cNUr7qF4M3Gk8yec93F1z1ziSiK2A,
+      22d580cb162c8ed7bb4aecb4800efd86f125ac98a64b5309612e4dd9a308307f
+    ],
+    {
+      renter: 5DaCxF3G194QnW8SbN7cNUr7qF4M3Gk8yec93F1z1ziSiK2A,
+      rent_start: 43,499,
+      confirm_rent: 43,504,
+      rent_end: 49,260,
+      stake_amount: 0
+    }
+  ]
+]
+
+### User Total Stake:
+[
+  [
+    [
+      5G6Bb5Lo9em2wxm2NcSGiV4APxp5Fr9LtvMSLEspRVSq1yUF
+    ],
+    115.7555 kDBC
+  ],
+  [
+    [
+      5DZhJSmfviEaA8zT1rWAECuLNtHZpfMWRS4HhSPSAjDPY1ez
+    ],
+    0
+  ],
+  [
+    [
+      5GQkqvKJhoEsB6W94qsdwPbKcfsmzZsXn2kN2sk8ahjB1THH
+    ],
+    0
+  ],
+  [
+    [
+      5DaCxF3G194QnW8SbN7cNUr7qF4M3Gk8yec93F1z1ziSiK2A
+    ],
+    0
+  ]
+]
+
+
+
+        let _ = Committee::set_staked_usd_per_order(RawOrigin::Root.into(), 15_000_000);
+        // 操作时的固定费率: 10 DBC
+        let _ = GenericFunc::set_fixed_tx_fee(RawOrigin::Root.into(), 10 * ONE_DBC);
+        // 每张GPU质押数量: 100,000 DBC
+        let _ = OnlineProfile::set_gpu_stake(RawOrigin::Root.into(), 100_000 * ONE_DBC);
+        // 设置奖励发放开始时间
+        let _ = OnlineProfile::set_reward_start_era(RawOrigin::Root.into(), 0);
+        // 设置每个Era奖励数量: 1,100,000
+        let _ = OnlineProfile::set_phase_n_reward_per_era(
+            RawOrigin::Root.into(),
+            0,
+            1_100_000 * ONE_DBC,
+        );
+        let _ = OnlineProfile::set_phase_n_reward_per_era(
+            RawOrigin::Root.into(),
+            1,
+            1_100_000 * ONE_DBC,
+        );
+        // 设置单卡质押上限： 7700_000_000
+        let _ = OnlineProfile::set_stake_usd_limit(RawOrigin::Root.into(), 7700_000_000);
+        // 设置标准GPU租金价格: (3080得分1000；租金每月1000RMB) {1000; 150_000_000};
+        let _ = OnlineProfile::set_standard_gpu_point_price(
+            RawOrigin::Root.into(),
+            StandardGpuPointPrice { gpu_point: 1000, gpu_price: 5_000_000 },
+        );
+
+
 
 
 
