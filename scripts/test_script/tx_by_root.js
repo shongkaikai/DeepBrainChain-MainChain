@@ -32,7 +32,9 @@ async function main() {
   // 读取密钥 type: sr25519, ssFormat: 42 (defaults)
   const keyring = new Keyring({ type: "sr25519" });
   // const accountFromKeyring = keyring.createFromUri(args["key"]); // 从助记词生成账户
-  const adminPair = keyring.addFromUri("0xe995d90490db0dde3a97000053f6d7fcb10ab454d3e31b17ead030cbdd8313cc"); // 从私钥生成账户对
+  const adminPair = keyring.addFromUri(
+    "0xe995d90490db0dde3a97000053f6d7fcb10ab454d3e31b17ead030cbdd8313cc"
+  ); // 从私钥生成账户对
 
   // 创建方法map
   var funcMap = {};
@@ -73,6 +75,8 @@ async function main() {
     api.tx.onlineProfile.rootSetStashController;
   funcMap["onlineProfile"]["rootAddStashMachine"] =
     api.tx.onlineProfile.rootAddStashMachine;
+  funcMap["onlineProfile"]["rootAddControllerMachines"] =
+    api.tx.onlineProfile.rootAddControllerMachines;
 
   funcMap["rentMachine"] = {};
   funcMap["rentMachine"]["setRentPot"] = api.tx.rentMachine.setRentPot;
