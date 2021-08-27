@@ -1995,7 +1995,7 @@ impl<T: Config> Pallet<T> {
                         // FIXME: 考虑1%给委员会的部分
                         ErasMachineReward::<T>::insert(current_era, &machine_id, machine_total_reward);
                         ErasStashReward::<T>::mutate(&current_era, &machine_info.machine_stash, |old_value| {
-                            *old_value + machine_total_reward
+                            *old_value += machine_total_reward
                         });
 
                         machine_total_reward - linear_reward_part
@@ -2012,10 +2012,10 @@ impl<T: Config> Pallet<T> {
                         }
 
                         ErasMachineReleasedReward::<T>::mutate(&current_era, &machine_id, |old_value| {
-                            *old_value + release_now
+                            *old_value += release_now
                         });
                         ErasStashReleasedReward::<T>::mutate(&current_era, &machine_info.machine_stash, |old_value| {
-                            *old_value + release_now
+                            *old_value += release_now
                         });
                     } else {
                         if era_index == current_era {
@@ -2051,10 +2051,10 @@ impl<T: Config> Pallet<T> {
                         stash_machine.can_claim_reward += release_to_stash;
 
                         ErasMachineReleasedReward::<T>::mutate(&current_era, &machine_id, |old_value| {
-                            *old_value + release_to_stash
+                            *old_value += release_to_stash
                         });
                         ErasStashReleasedReward::<T>::mutate(&current_era, &machine_info.machine_stash, |old_value| {
-                            *old_value + release_now
+                            *old_value += release_now
                         });
 
                         // 剩下分给committee
